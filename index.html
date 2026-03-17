@@ -1,0 +1,882 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Seed-VC Comparison Report</title>
+  <style>
+    :root {
+      --bg: #f4efe6;
+      --panel: #fffdf8;
+      --panel-strong: #f7f1e5;
+      --ink: #1f2933;
+      --muted: #6b7280;
+      --line: #d8d1c4;
+      --accent: #0f766e;
+      --accent-soft: #d9f2ef;
+      --bad: #b42318;
+      --warn: #b45309;
+      --shadow: 0 12px 28px rgba(35, 31, 32, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Source Sans 3", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 28%),
+        radial-gradient(circle at top right, rgba(217, 242, 239, 0.8), transparent 30%),
+        linear-gradient(180deg, #f8f3ec 0%, var(--bg) 100%);
+    }
+    .wrap {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .hero, .controls, .table-wrap {
+      background: rgba(255, 253, 248, 0.92);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+    .hero {
+      padding: 24px;
+      margin-bottom: 18px;
+      background:
+        linear-gradient(135deg, rgba(255, 244, 214, 0.9), rgba(217, 242, 239, 0.94)),
+        var(--panel);
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-size: 34px;
+      letter-spacing: 0.01em;
+    }
+    .meta, .run-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .run-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      margin: 18px 0;
+    }
+    .run-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+    }
+    .run-card h2 {
+      margin: 0 0 8px;
+      font-size: 22px;
+    }
+    .checkpoint {
+      font-family: "Fira Code", "SFMono-Regular", monospace;
+      font-size: 12px;
+      color: var(--muted);
+      overflow-wrap: anywhere;
+      margin-bottom: 12px;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .metric-card {
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--panel-strong);
+    }
+    .metric-card .label {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .metric-card .value {
+      font-size: 24px;
+      font-weight: 700;
+      margin-top: 4px;
+      color: var(--accent);
+    }
+    .summary-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .summary-strip .metric-card { background: rgba(255, 255, 255, 0.8); }
+    .controls {
+      padding: 16px;
+      margin-bottom: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: end;
+    }
+    .controls label {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    select, input, button {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 9px 11px;
+      font: inherit;
+      background: #fff;
+      color: var(--ink);
+    }
+    button {
+      cursor: pointer;
+      background: var(--accent-soft);
+      color: #0b5c55;
+      font-weight: 600;
+    }
+    .table-wrap {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1180px;
+    }
+    thead {
+      background: #f1ece3;
+    }
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ebe4d6;
+      vertical-align: top;
+      text-align: left;
+      font-size: 14px;
+    }
+    th {
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #475467;
+    }
+    tr.hidden { display: none; }
+    .file-label {
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .subtle {
+      color: var(--muted);
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+    .metric-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #0b5c55;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .metric-pill.na {
+      background: #f3f4f6;
+      color: var(--muted);
+    }
+    .metric-pill.delta-up { background: #d9f2ef; }
+    .metric-pill.delta-down { background: #fde9d8; color: #9a3412; }
+    .status {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .status.error { color: var(--bad); }
+    .missing {
+      padding: 10px;
+      border-radius: 12px;
+      background: #fff7ed;
+      border: 1px dashed #f1b98b;
+      color: var(--warn);
+      font-weight: 600;
+      font-size: 13px;
+    }
+    audio {
+      width: 190px;
+      max-width: 100%;
+      display: block;
+      margin-top: 6px;
+    }
+    @media (max-width: 900px) {
+      .wrap { padding: 12px; }
+      h1 { font-size: 28px; }
+      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      audio { width: 150px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>Seed-VC Evaluation Comparison</h1>
+      <div class="meta">
+        <span>Generated: 2026-03-17T14:21:17.002553+00:00</span>
+        <span>Metric: resemblyzer_similarity</span>
+        <span>Total comparison rows: 9</span>
+      </div>
+      <div class="run-grid">
+        
+        <article class="run-card">
+          <h2>Run A</h2>
+          <div class="checkpoint">runs/my_run/DiT_epoch_00007_step_00800.pth</div>
+          <div class="metrics">
+            <div class="metric-card">
+              <div class="label">Mean</div>
+              <div class="value">0.8226</div>
+            </div>
+            <div class="metric-card">
+              <div class="label">Rows scored</div>
+              <div class="value">9</div>
+            </div>
+            <div class="metric-card">
+              <div class="label">Generated</div>
+              <div class="value">9</div>
+            </div>
+          </div>
+          <div class="run-meta" style="margin-top:12px;">
+            <span>Cache: 20260314-032108</span>
+            <span><a href="manifests/run_a/metrics_manifest.json">metrics_manifest.json</a></span>
+            <span><a href="manifests/run_a/results_manifest.json">results_manifest.json</a></span>
+          </div>
+        </article>
+        
+        <article class="run-card">
+          <h2>Run B</h2>
+          <div class="checkpoint">./checkpoints/models--Plachta--Seed-VC/snapshots/257283f9f41585055e8f858fba4fd044e5caed6e/DiT_seed_v2_uvit_whisper_base_f0_44k_bigvgan_pruned_ft_ema.pth</div>
+          <div class="metrics">
+            <div class="metric-card">
+              <div class="label">Mean</div>
+              <div class="value">0.7465</div>
+            </div>
+            <div class="metric-card">
+              <div class="label">Rows scored</div>
+              <div class="value">9</div>
+            </div>
+            <div class="metric-card">
+              <div class="label">Generated</div>
+              <div class="value">9</div>
+            </div>
+          </div>
+          <div class="run-meta" style="margin-top:12px;">
+            <span>Cache: 20260317-160236</span>
+            <span><a href="manifests/run_b/metrics_manifest.json">metrics_manifest.json</a></span>
+            <span><a href="manifests/run_b/results_manifest.json">results_manifest.json</a></span>
+          </div>
+        </article>
+        
+      </div>
+      <div class="summary-strip">
+        <div class="metric-card">
+          <div class="label">Rows in both runs</div>
+          <div class="value">9</div>
+        </div>
+        <div class="metric-card">
+          <div class="label">Only in Run A</div>
+          <div class="value">0</div>
+        </div>
+        <div class="metric-card">
+          <div class="label">Only in Run B</div>
+          <div class="value">0</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="controls">
+      <label>
+        Sort rows
+        <select id="sortOrder">
+          <option value="delta-desc">Delta high to low</option>
+          <option value="delta-asc">Delta low to high</option>
+          <option value="run-b-desc">Run B high to low</option>
+          <option value="run-a-desc">Run A high to low</option>
+          <option value="original">Original order</option>
+        </select>
+      </label>
+      <label>
+        Min run A metric
+        <input id="minRunA" type="number" step="0.0001" placeholder="e.g. 0.8000">
+      </label>
+      <label>
+        Min run B metric
+        <input id="minRunB" type="number" step="0.0001" placeholder="e.g. 0.8000">
+      </label>
+      <label>
+        Require both runs
+        <select id="requireBoth">
+          <option value="no">No</option>
+          <option value="yes">Yes</option>
+        </select>
+      </label>
+      <button id="clearFilters" type="button">Reset</button>
+      <span id="visibleCount" class="status"></span>
+    </section>
+
+    <section class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Item</th>
+            <th>Source</th>
+            <th>Target</th>
+            <th>Run A</th>
+            <th>Run B</th>
+            <th>Delta</th>
+          </tr>
+        </thead>
+        <tbody id="rows">
+          
+          <tr
+            data-order="0"
+            data-run-a="0.8043721318244934"
+            data-run-b="0.7528656721115112"
+            data-delta="-0.05150645971298218"
+            data-has-both="true"
+          >
+            <td>1</td>
+            <td>
+              <div class="file-label">000017_BMI_UK16050016_chernihiv_sofiivka_MIC03.flac</div>
+              <div class="subtle">target: 000017_mixture.flac</div>
+            </td>
+            <td>
+              <div class="file-label">000017_BMI_UK16050016_chernihiv_sofiivka_MIC03</div>
+              <audio controls preload="none" src="audio/shared/source/-4L87nEO4N4__-4L87nEO4N4_000017_BMI_UK16050016_chernihiv_sofiivka_MIC03.mp3"></audio>
+            </td>
+            <td>
+              <div class="file-label">000017_mixture</div>
+              <audio controls preload="none" src="audio/shared/target/-4L87nEO4N4__-4L87nEO4N4_000017_mixture.mp3"></audio>
+            </td>
+            <td>
+              
+              <div class="metric-pill">0.8044</div>
+              <div class="status">
+                generation=generated, metric=ok
+                
+              </div>
+              <audio controls preload="none" src="audio/run_a/generated/20260314-032108__000017_BMI_UK16050016_chernihiv_sofiivka_MIC03.mp3"></audio>
+              
+            </td>
+            <td>
+              
+              <div class="metric-pill">0.7529</div>
+              <div class="status">
+                generation=generated, metric=ok
+                
+              </div>
+              <audio controls preload="none" src="audio/run_b/generated/20260317-160236__000017_BMI_UK16050016_chernihiv_sofiivka_MIC03.mp3"></audio>
+              
+            </td>
+            <td>
+              
+              
+                
+              
+              <div class="metric-pill delta-down">-0.0515</div>
+              <div class="subtle">Run B - Run A</div>
+            </td>
+          </tr>
+          
+          <tr
+            data-order="1"
+            data-run-a="0.809120237827301"
+            data-run-b="0.7416223287582397"
+            data-delta="-0.06749790906906128"
+            data-has-both="true"
+          >
+            <td>2</td>
+            <td>
+              <div class="file-label">000005_BMI_UK20080216_ivano-frankivsk_pidvynnya_MIC03.flac</div>
+              <div class="subtle">target: 000005_mixture.flac</div>
+            </td>
+            <td>
+              <div class="file-label">000005_BMI_UK20080216_ivano-frankivsk_pidvynnya_MIC03</div>
+              <audio controls preload="none" src="audio/shared/source/-kcWnHngJMA__-kcWnHngJMA_000005_BMI_UK20080216_ivano-frankivsk_pidvynnya_MIC03.mp3"></audio>
+            </td>
+            <td>
+              <div class="file-label">000005_mixture</div>
+              <audio controls preload="none" src="audio/shared/target/-kcWnHngJMA__-kcWnHngJMA_000005_mixture.mp3"></audio>
+            </td>
+            <td>
+              
+              <div class="metric-pill">0.8091</div>
+              <div class="status">
+                generation=generated, metric=ok
+                
+              </div>
+              <audio controls preload="none" src="audio/run_a/generated/20260314-032108__000005_BMI_UK20080216_ivano-frankivsk_pidvynnya_MIC03.mp3"></audio>
+              
+            </td>
+            <td>
+              
+              <div class="metric-pill">0.7416</div>
+              <div class="status">
+                generation=generated, metric=ok
+                
+              </div>
+              <audio controls preload="none" src="audio/run_b/generated/20260317-160236__000005_BMI_UK20080216_ivano-frankivsk_pidvynnya_MIC03.mp3"></audio>
+              
+            </td>
+            <td>
+              
+              
+                
+              
+              <div class="metric-pill delta-down">-0.0675</div>
+              <div class="subtle">Run B - Run A</div>
+            </td>
+          </tr>
+          
+          <tr
+            data-order="2"
+            data-run-a="0.8794981837272644"
+            data-run-b="0.8378115892410278"
+            data-delta="-0.04168659448623657"
+            data-has-both="true"
+          >
+            <td>3</td>
+            <td>
+              <div class="file-label">000006_BMI_UK17100190_kherson_bekhtery_MIC01.flac</div>
+              <div class="subtle">target: 000006_mixture.flac</div>
+            </td>
+            <td>
+              <div class="file-label">000006_BMI_UK17100190_kherson_bekhtery_MIC01</div>
+              <audio controls preload="none" src="audio/shared/source/-oYOExW80Ps__-oYOExW80Ps_000006_BMI_UK17100190_kherson_bekhtery_MIC01.mp3"></audio>
+            </td>
+            <td>
+              <div class="file-label">000006_mixture</div>
+              <audio controls preload="none" src="audio/shared/target/-oYOExW80Ps__-oYOExW80Ps_000006_mixture.mp3"></audio>
+            </td>
+            <td>
+              
+              <div class="metric-pill">0.8795</div>
+              <div class="status">
+                generation=generated, metric=ok
+                
+              </div>
+              <audio controls preload="none" src="audio/run_a/generated/20260314-032108__000006_BMI_UK17100190_kherson_bekhtery_MIC01.mp3"></audio>
+              
+            </td>
+            <td>
+              
+              <div class="metric-pill">0.8378</div>
+              <div class="status">
+                generation=generated, metric=ok
+                
+              </div>
+              <audio controls preload="none" src="audio/run_b/generated/20260317-160236__000006_BMI_UK17100190_kherson_bekhtery_MIC01.mp3"></audio>
+              
+            </td>
+            <td>
+              
+              
+                
+              
+              <div class="metric-pill delta-down">-0.0417</div>
+              <div class="subtle">Run B - Run A</div>
+            </td>
+          </tr>
+          
+          <tr
+            data-order="3"
+            data-run-a="0.8163633346557617"
+            data-run-b="0.6924203038215637"
+            data-delta="-0.123943030834198"
+            data-has-both="true"
+          >
+            <td>4</td>
+            <td>
+              <div class="file-label">000019_BMI_UK17100724_khmelnytskyi_zeleni_kurylivtsi_MIC05.flac</div>
+              <div class="subtle">target: 000019_mixture.flac</div>
+            </td>
+            <td>
+              <div class="file-label">000019_BMI_UK17100724_khmelnytskyi_zeleni_kurylivtsi_MIC05</div>
+              <audio controls preload="none" src="audio/shared/source/0qeXKXMmvL4__0qeXKXMmvL4_000019_BMI_UK17100724_khmelnytskyi_zeleni_kurylivtsi_MIC05.mp3"></audio>
+            </td>
+            <td>
+              <div class="file-label">000019_mixture</div>
+              <audio controls preload="none" src="audio/shared/target/0qeXKXMmvL4__0qeXKXMmvL4_000019_mixture.mp3"></audio>
+            </td>
+            <td>
+              
+              <div class="metric-pill">0.8164</div>
+              <div class="status">
+                generation=generated, metric=ok
+                
+              </div>
+              <audio controls preload="none" src="audio/run_a/generated/20260314-032108__000019_BMI_UK17100724_khmelnytskyi_zeleni_kurylivtsi_MIC05.mp3"></audio>
+              
+            </td>
+            <td>
+              
+              <div class="metric-pill">0.6924</div>
+              <div class="status">
+                generation=generated, metric=ok
+                
+              </div>
+              <audio controls preload="none" src="audio/run_b/generated/20260317-160236__000019_BMI_UK17100724_khmelnytskyi_zeleni_kurylivtsi_MIC05.mp3"></audio>
+              
+            </td>
+            <td>
+              
+              
+                
+              
+              <div class="metric-pill delta-down">-0.1239</div>
+              <div class="subtle">Run B - Run A</div>
+            </td>
+          </tr>
+          
+          <tr
+            data-order="4"
+            data-run-a="0.8402347564697266"
+            data-run-b="0.7824185490608215"
+            data-delta="-0.05781620740890503"
+            data-has-both="true"
+          >
+            <td>5</td>
+            <td>
+              <div class="file-label">000020_BMI_UK16050184_dnipropetrovsk_pidhorodne_MIC02.flac</div>
+              <div class="subtle">target: 000020_mixture.flac</div>
+            </td>
+            <td>
+              <div class="file-label">000020_BMI_UK16050184_dnipropetrovsk_pidhorodne_MIC02</div>
+              <audio controls preload="none" src="audio/shared/source/0xczykQot4E__0xczykQot4E_000020_BMI_UK16050184_dnipropetrovsk_pidhorodne_MIC02.mp3"></audio>
+            </td>
+            <td>
+              <div class="file-label">000020_mixture</div>
+              <audio controls preload="none" src="audio/shared/target/0xczykQot4E__0xczykQot4E_000020_mixture.mp3"></audio>
+            </td>
+            <td>
+              
+              <div class="metric-pill">0.8402</div>
+              <div class="status">
+                generation=generated, metric=ok
+                
+              </div>
+              <audio controls preload="none" src="audio/run_a/generated/20260314-032108__000020_BMI_UK16050184_dnipropetrovsk_pidhorodne_MIC02.mp3"></audio>
+              
+            </td>
+            <td>
+              
+              <div class="metric-pill">0.7824</div>
+              <div class="status">
+                generation=generated, metric=ok
+                
+              </div>
+              <audio controls preload="none" src="audio/run_b/generated/20260317-160236__000020_BMI_UK16050184_dnipropetrovsk_pidhorodne_MIC02.mp3"></audio>
+              
+            </td>
+            <td>
+              
+              
+                
+              
+              <div class="metric-pill delta-down">-0.0578</div>
+              <div class="subtle">Run B - Run A</div>
+            </td>
+          </tr>
+          
+          <tr
+            data-order="5"
+            data-run-a="0.8294225335121155"
+            data-run-b="0.7578389048576355"
+            data-delta="-0.07158362865447998"
+            data-has-both="true"
+          >
+            <td>6</td>
+            <td>
+              <div class="file-label">000001_BMI_UK16100032_kiev_fasova_MIC02.flac</div>
+              <div class="subtle">target: 000001_mixture.flac</div>
+            </td>
+            <td>
+              <div class="file-label">000001_BMI_UK16100032_kiev_fasova_MIC02</div>
+              <audio controls preload="none" src="audio/shared/source/0zQ1XXJPORA__0zQ1XXJPORA_000001_BMI_UK16100032_kiev_fasova_MIC02.mp3"></audio>
+            </td>
+            <td>
+              <div class="file-label">000001_mixture</div>
+              <audio controls preload="none" src="audio/shared/target/0zQ1XXJPORA__0zQ1XXJPORA_000001_mixture.mp3"></audio>
+            </td>
+            <td>
+              
+              <div class="metric-pill">0.8294</div>
+              <div class="status">
+                generation=generated, metric=ok
+                
+              </div>
+              <audio controls preload="none" src="audio/run_a/generated/20260314-032108__000001_BMI_UK16100032_kiev_fasova_MIC02.mp3"></audio>
+              
+            </td>
+            <td>
+              
+              <div class="metric-pill">0.7578</div>
+              <div class="status">
+                generation=generated, metric=ok
+                
+              </div>
+              <audio controls preload="none" src="audio/run_b/generated/20260317-160236__000001_BMI_UK16100032_kiev_fasova_MIC02.mp3"></audio>
+              
+            </td>
+            <td>
+              
+              
+                
+              
+              <div class="metric-pill delta-down">-0.0716</div>
+              <div class="subtle">Run B - Run A</div>
+            </td>
+          </tr>
+          
+          <tr
+            data-order="6"
+            data-run-a="0.7871630191802979"
+            data-run-b="0.769773542881012"
+            data-delta="-0.01738947629928589"
+            data-has-both="true"
+          >
+            <td>7</td>
+            <td>
+              <div class="file-label">000022_BMI_UK16100158_chernihiv_karylsky_MIC03.flac</div>
+              <div class="subtle">target: 000022_mixture.flac</div>
+            </td>
+            <td>
+              <div class="file-label">000022_BMI_UK16100158_chernihiv_karylsky_MIC03</div>
+              <audio controls preload="none" src="audio/shared/source/2XfpKIehW-c__2XfpKIehW-c_000022_BMI_UK16100158_chernihiv_karylsky_MIC03.mp3"></audio>
+            </td>
+            <td>
+              <div class="file-label">000022_mixture</div>
+              <audio controls preload="none" src="audio/shared/target/2XfpKIehW-c__2XfpKIehW-c_000022_mixture.mp3"></audio>
+            </td>
+            <td>
+              
+              <div class="metric-pill">0.7872</div>
+              <div class="status">
+                generation=generated, metric=ok
+                
+              </div>
+              <audio controls preload="none" src="audio/run_a/generated/20260314-032108__000022_BMI_UK16100158_chernihiv_karylsky_MIC03.mp3"></audio>
+              
+            </td>
+            <td>
+              
+              <div class="metric-pill">0.7698</div>
+              <div class="status">
+                generation=generated, metric=ok
+                
+              </div>
+              <audio controls preload="none" src="audio/run_b/generated/20260317-160236__000022_BMI_UK16100158_chernihiv_karylsky_MIC03.mp3"></audio>
+              
+            </td>
+            <td>
+              
+              
+                
+              
+              <div class="metric-pill delta-down">-0.0174</div>
+              <div class="subtle">Run B - Run A</div>
+            </td>
+          </tr>
+          
+          <tr
+            data-order="7"
+            data-run-a="0.8582451343536377"
+            data-run-b="0.7180139422416687"
+            data-delta="-0.140231192111969"
+            data-has-both="true"
+          >
+            <td>8</td>
+            <td>
+              <div class="file-label">000011_BMI_UK15070071_poltava_solonytsya_MIC01.flac</div>
+              <div class="subtle">target: 000011_mixture.flac</div>
+            </td>
+            <td>
+              <div class="file-label">000011_BMI_UK15070071_poltava_solonytsya_MIC01</div>
+              <audio controls preload="none" src="audio/shared/source/3MQoX6em51E__3MQoX6em51E_000011_BMI_UK15070071_poltava_solonytsya_MIC01.mp3"></audio>
+            </td>
+            <td>
+              <div class="file-label">000011_mixture</div>
+              <audio controls preload="none" src="audio/shared/target/3MQoX6em51E__3MQoX6em51E_000011_mixture.mp3"></audio>
+            </td>
+            <td>
+              
+              <div class="metric-pill">0.8582</div>
+              <div class="status">
+                generation=generated, metric=ok
+                
+              </div>
+              <audio controls preload="none" src="audio/run_a/generated/20260314-032108__000011_BMI_UK15070071_poltava_solonytsya_MIC01.mp3"></audio>
+              
+            </td>
+            <td>
+              
+              <div class="metric-pill">0.7180</div>
+              <div class="status">
+                generation=generated, metric=ok
+                
+              </div>
+              <audio controls preload="none" src="audio/run_b/generated/20260317-160236__000011_BMI_UK15070071_poltava_solonytsya_MIC01.mp3"></audio>
+              
+            </td>
+            <td>
+              
+              
+                
+              
+              <div class="metric-pill delta-down">-0.1402</div>
+              <div class="subtle">Run B - Run A</div>
+            </td>
+          </tr>
+          
+          <tr
+            data-order="8"
+            data-run-a="0.7793539762496948"
+            data-run-b="0.665848970413208"
+            data-delta="-0.11350500583648682"
+            data-has-both="true"
+          >
+            <td>9</td>
+            <td>
+              <div class="file-label">000018_BMI_UK15070071_poltava_solonytsya_MIC03.flac</div>
+              <div class="subtle">target: 000018_mixture.flac</div>
+            </td>
+            <td>
+              <div class="file-label">000018_BMI_UK15070071_poltava_solonytsya_MIC03</div>
+              <audio controls preload="none" src="audio/shared/source/3MQoX6em51E__3MQoX6em51E_000018_BMI_UK15070071_poltava_solonytsya_MIC03.mp3"></audio>
+            </td>
+            <td>
+              <div class="file-label">000018_mixture</div>
+              <audio controls preload="none" src="audio/shared/target/3MQoX6em51E__3MQoX6em51E_000018_mixture.mp3"></audio>
+            </td>
+            <td>
+              
+              <div class="metric-pill">0.7794</div>
+              <div class="status">
+                generation=generated, metric=ok
+                
+              </div>
+              <audio controls preload="none" src="audio/run_a/generated/20260314-032108__000018_BMI_UK15070071_poltava_solonytsya_MIC03.mp3"></audio>
+              
+            </td>
+            <td>
+              
+              <div class="metric-pill">0.6658</div>
+              <div class="status">
+                generation=generated, metric=ok
+                
+              </div>
+              <audio controls preload="none" src="audio/run_b/generated/20260317-160236__000018_BMI_UK15070071_poltava_solonytsya_MIC03.mp3"></audio>
+              
+            </td>
+            <td>
+              
+              
+                
+              
+              <div class="metric-pill delta-down">-0.1135</div>
+              <div class="subtle">Run B - Run A</div>
+            </td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <script>
+    const tbody = document.getElementById('rows');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    const sortOrder = document.getElementById('sortOrder');
+    const minRunA = document.getElementById('minRunA');
+    const minRunB = document.getElementById('minRunB');
+    const requireBoth = document.getElementById('requireBoth');
+    const clearFilters = document.getElementById('clearFilters');
+    const visibleCount = document.getElementById('visibleCount');
+
+    function parseNumber(value) {
+      if (value === '') return null;
+      const parsed = Number(value);
+      return Number.isFinite(parsed) ? parsed : null;
+    }
+
+    function rowNumber(row, key) {
+      return parseNumber(row.dataset[key]);
+    }
+
+    function updateView() {
+      const minA = parseNumber(minRunA.value);
+      const minB = parseNumber(minRunB.value);
+      const needBoth = requireBoth.value === 'yes';
+
+      rows.forEach((row) => {
+        const runA = rowNumber(row, 'runA');
+        const runB = rowNumber(row, 'runB');
+        const hasBoth = row.dataset.hasBoth === 'true';
+        const hide =
+          (minA !== null && (runA === null || runA < minA)) ||
+          (minB !== null && (runB === null || runB < minB)) ||
+          (needBoth && !hasBoth);
+        row.classList.toggle('hidden', hide);
+      });
+
+      const ordered = [...rows];
+      const mode = sortOrder.value;
+      const keyMap = {
+        'delta-desc': ['delta', -1],
+        'delta-asc': ['delta', 1],
+        'run-b-desc': ['runB', -1],
+        'run-a-desc': ['runA', -1],
+      };
+
+      if (mode === 'original') {
+        ordered.sort((a, b) => Number(a.dataset.order) - Number(b.dataset.order));
+      } else {
+        const [key, direction] = keyMap[mode];
+        ordered.sort((a, b) => {
+          const left = rowNumber(a, key);
+          const right = rowNumber(b, key);
+          if (left === null && right === null) return Number(a.dataset.order) - Number(b.dataset.order);
+          if (left === null) return 1;
+          if (right === null) return -1;
+          if (left === right) return Number(a.dataset.order) - Number(b.dataset.order);
+          return left < right ? direction : -direction;
+        });
+      }
+
+      tbody.innerHTML = '';
+      ordered.forEach((row) => tbody.appendChild(row));
+
+      const visible = rows.filter((row) => !row.classList.contains('hidden')).length;
+      visibleCount.textContent = `${visible} of ${rows.length} rows visible`;
+    }
+
+    [sortOrder, minRunA, minRunB, requireBoth].forEach((el) => {
+      el.addEventListener('input', updateView);
+      el.addEventListener('change', updateView);
+    });
+
+    clearFilters.addEventListener('click', () => {
+      sortOrder.value = 'delta-desc';
+      minRunA.value = '';
+      minRunB.value = '';
+      requireBoth.value = 'no';
+      updateView();
+    });
+
+    updateView();
+  </script>
+</body>
+</html>
