@@ -6,17 +6,16 @@
   <title>Seed-VC Comparison Report</title>
   <style>
     :root {
-      --bg: #f4efe6;
-      --panel: #fffdf8;
-      --panel-strong: #f7f1e5;
-      --ink: #1f2933;
+      --bg: #f5efe7;
+      --panel: rgba(255, 253, 248, 0.96);
+      --ink: #1f2937;
       --muted: #6b7280;
-      --line: #d8d1c4;
+      --line: #ddd3c6;
       --accent: #0f766e;
-      --accent-soft: #d9f2ef;
-      --bad: #b42318;
+      --accent-soft: #d8f3ef;
       --warn: #b45309;
-      --shadow: 0 12px 28px rgba(35, 31, 32, 0.08);
+      --bad: #b91c1c;
+      --shadow: 0 12px 28px rgba(17, 24, 39, 0.08);
     }
     * { box-sizing: border-box; }
     body {
@@ -24,32 +23,28 @@
       font-family: "Source Sans 3", "Segoe UI", sans-serif;
       color: var(--ink);
       background:
-        radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 28%),
-        radial-gradient(circle at top right, rgba(217, 242, 239, 0.8), transparent 30%),
-        linear-gradient(180deg, #f8f3ec 0%, var(--bg) 100%);
+        radial-gradient(circle at top right, rgba(15, 118, 110, 0.10), transparent 25%),
+        linear-gradient(180deg, #faf7f2 0%, var(--bg) 100%);
     }
     .wrap {
       max-width: 1480px;
       margin: 0 auto;
       padding: 24px;
     }
-    .hero, .controls, .table-wrap {
-      background: rgba(255, 253, 248, 0.92);
+    .hero, .panel {
+      background: var(--panel);
       border: 1px solid var(--line);
       border-radius: 18px;
       box-shadow: var(--shadow);
     }
     .hero {
       padding: 24px;
-      margin-bottom: 18px;
-      background:
-        linear-gradient(135deg, rgba(255, 244, 214, 0.9), rgba(217, 242, 239, 0.94)),
-        var(--panel);
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, rgba(255, 245, 214, 0.92), rgba(216, 243, 239, 0.96));
     }
     h1 {
-      margin: 0 0 10px;
+      margin: 0 0 8px;
       font-size: 34px;
-      letter-spacing: 0.01em;
     }
     .meta, .run-meta {
       display: flex;
@@ -58,66 +53,73 @@
       color: var(--muted);
       font-size: 14px;
     }
-    .run-grid {
+    .metric-grid, .run-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 14px;
-      margin: 18px 0;
+      gap: 12px;
+      margin: 16px 0;
     }
-    .run-card {
+    .metric-grid {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    .run-grid {
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+    .metric-card, .run-card {
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: 16px;
-      padding: 16px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+    .metric-card.active {
+      border-color: rgba(15, 118, 110, 0.45);
+      background: linear-gradient(180deg, rgba(216, 243, 239, 0.75), rgba(255, 255, 255, 0.92));
+    }
+    .eyebrow {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .value {
+      font-size: 28px;
+      font-weight: 700;
+      margin-top: 4px;
     }
     .run-card h2 {
       margin: 0 0 8px;
       font-size: 22px;
     }
     .checkpoint {
-      font-family: "Fira Code", "SFMono-Regular", monospace;
+      font-family: "Fira Code", monospace;
       font-size: 12px;
       color: var(--muted);
       overflow-wrap: anywhere;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
-    .metrics {
+    .run-metric-strip {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 10px;
-    }
-    .metric-card {
-      padding: 12px;
-      border-radius: 12px;
-      border: 1px solid var(--line);
-      background: var(--panel-strong);
-    }
-    .metric-card .label {
-      font-size: 12px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-    .metric-card .value {
-      font-size: 24px;
-      font-weight: 700;
-      margin-top: 4px;
-      color: var(--accent);
-    }
-    .summary-strip {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px;
       margin-top: 12px;
     }
-    .summary-strip .metric-card { background: rgba(255, 255, 255, 0.8); }
+    .mini-card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.65);
+    }
+    .mini-card .mini-value {
+      font-size: 20px;
+      font-weight: 700;
+    }
     .controls {
-      padding: 16px;
-      margin-bottom: 14px;
       display: flex;
       flex-wrap: wrap;
       gap: 14px;
       align-items: end;
+      padding: 16px;
+      margin-bottom: 14px;
     }
     .controls label {
       display: flex;
@@ -131,14 +133,14 @@
       border-radius: 10px;
       padding: 9px 11px;
       font: inherit;
-      background: #fff;
+      background: white;
       color: var(--ink);
     }
     button {
       cursor: pointer;
       background: var(--accent-soft);
       color: #0b5c55;
-      font-weight: 600;
+      font-weight: 700;
     }
     .table-wrap {
       overflow-x: auto;
@@ -146,66 +148,64 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 1180px;
+      min-width: 1280px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
     }
-    thead {
-      background: #f1ece3;
-    }
+    thead { background: #f2ede5; }
     th, td {
       padding: 12px;
-      border-bottom: 1px solid #ebe4d6;
-      vertical-align: top;
+      border-bottom: 1px solid #ece4d8;
       text-align: left;
+      vertical-align: top;
       font-size: 14px;
     }
     th {
       font-size: 12px;
-      letter-spacing: 0.05em;
       text-transform: uppercase;
+      letter-spacing: 0.05em;
       color: #475467;
     }
-    tr.hidden { display: none; }
     .file-label {
       font-weight: 700;
-      margin-bottom: 4px;
-    }
-    .subtle {
-      color: var(--muted);
-      font-size: 12px;
-      overflow-wrap: anywhere;
+      margin-bottom: 6px;
     }
     .metric-pill {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 6px 10px;
+      gap: 6px;
       border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 700;
       background: var(--accent-soft);
       color: #0b5c55;
-      font-weight: 700;
-      margin-bottom: 6px;
+      margin: 0 8px 8px 0;
     }
     .metric-pill.na {
       background: #f3f4f6;
       color: var(--muted);
     }
-    .metric-pill.delta-up { background: #d9f2ef; }
-    .metric-pill.delta-down { background: #fde9d8; color: #9a3412; }
+    .metric-pill.warn {
+      background: #fff7ed;
+      color: var(--warn);
+    }
+    .metric-pill.bad {
+      background: #fee2e2;
+      color: var(--bad);
+    }
+    .delta-positive { color: #166534; }
+    .delta-negative { color: #9a3412; }
     .status {
       color: var(--muted);
       font-size: 12px;
       line-height: 1.5;
+      margin-top: 6px;
     }
     .status.error { color: var(--bad); }
-    .missing {
-      padding: 10px;
-      border-radius: 12px;
-      background: #fff7ed;
-      border: 1px dashed #f1b98b;
-      color: var(--warn);
-      font-weight: 600;
-      font-size: 13px;
-    }
     audio {
       width: 190px;
       max-width: 100%;
@@ -215,7 +215,6 @@
     @media (max-width: 900px) {
       .wrap { padding: 12px; }
       h1 { font-size: 28px; }
-      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       audio { width: 150px; }
     }
   </style>
@@ -225,101 +224,162 @@
     <section class="hero">
       <h1>Seed-VC Evaluation Comparison</h1>
       <div class="meta">
-        <span>Generated: 2026-03-17T14:21:17.002553+00:00</span>
-        <span>Metric: resemblyzer_similarity</span>
-        <span>Total comparison rows: 9</span>
-      </div>
-      <div class="run-grid">
-        
-        <article class="run-card">
-          <h2>Run A</h2>
-          <div class="checkpoint">runs/my_run/DiT_epoch_00007_step_00800.pth</div>
-          <div class="metrics">
-            <div class="metric-card">
-              <div class="label">Mean</div>
-              <div class="value">0.8226</div>
-            </div>
-            <div class="metric-card">
-              <div class="label">Rows scored</div>
-              <div class="value">9</div>
-            </div>
-            <div class="metric-card">
-              <div class="label">Generated</div>
-              <div class="value">9</div>
-            </div>
-          </div>
-          <div class="run-meta" style="margin-top:12px;">
-            <span>Cache: 20260314-032108</span>
-            <span><a href="manifests/run_a/metrics_manifest.json">metrics_manifest.json</a></span>
-            <span><a href="manifests/run_a/results_manifest.json">results_manifest.json</a></span>
-          </div>
-        </article>
-        
-        <article class="run-card">
-          <h2>Run B</h2>
-          <div class="checkpoint">./checkpoints/models--Plachta--Seed-VC/snapshots/257283f9f41585055e8f858fba4fd044e5caed6e/DiT_seed_v2_uvit_whisper_base_f0_44k_bigvgan_pruned_ft_ema.pth</div>
-          <div class="metrics">
-            <div class="metric-card">
-              <div class="label">Mean</div>
-              <div class="value">0.7465</div>
-            </div>
-            <div class="metric-card">
-              <div class="label">Rows scored</div>
-              <div class="value">9</div>
-            </div>
-            <div class="metric-card">
-              <div class="label">Generated</div>
-              <div class="value">9</div>
-            </div>
-          </div>
-          <div class="run-meta" style="margin-top:12px;">
-            <span>Cache: 20260317-160236</span>
-            <span><a href="manifests/run_b/metrics_manifest.json">metrics_manifest.json</a></span>
-            <span><a href="manifests/run_b/results_manifest.json">results_manifest.json</a></span>
-          </div>
-        </article>
-        
-      </div>
-      <div class="summary-strip">
-        <div class="metric-card">
-          <div class="label">Rows in both runs</div>
-          <div class="value">9</div>
-        </div>
-        <div class="metric-card">
-          <div class="label">Only in Run A</div>
-          <div class="value">0</div>
-        </div>
-        <div class="metric-card">
-          <div class="label">Only in Run B</div>
-          <div class="value">0</div>
-        </div>
+        <span>Generated: 2026-03-31T11:18:03.487905+00:00</span>
+        <span>Total rows: 37</span>
+        <span>Default metric: resemblyzer_similarity</span>
       </div>
     </section>
 
-    <section class="controls">
+    <section class="metric-grid">
+      
+      <article class="metric-card" data-metric-card="resemblyzer_similarity">
+        <div class="eyebrow">Timbre similarity</div>
+        <div class="value">Resemblyzer similarity</div>
+        <div class="status">Cosine similarity between target and generated Resemblyzer embeddings.</div>
+        <div class="status">higher is better</div>
+      </article>
+      
+      <article class="metric-card" data-metric-card="f0_rmse">
+        <div class="eyebrow">Melody preservation</div>
+        <div class="value">F0 RMSE</div>
+        <div class="status">Root-mean-square error between aligned source and generated F0 contours.</div>
+        <div class="status">lower is better</div>
+      </article>
+      
+      <article class="metric-card" data-metric-card="f0_correlation">
+        <div class="eyebrow">Melody preservation</div>
+        <div class="value">F0 correlation</div>
+        <div class="status">Pearson correlation between aligned source and generated F0 contours.</div>
+        <div class="status">higher is better</div>
+      </article>
+      
+      <article class="metric-card" data-metric-card="singmos_naturalness">
+        <div class="eyebrow">Naturalness</div>
+        <div class="value">SingMOS naturalness</div>
+        <div class="status">Mean SingMOS-Pro score across 5-second generated-audio chunks.</div>
+        <div class="status">higher is better</div>
+      </article>
+      
+    </section>
+
+    <section class="run-grid">
+      
+      <article class="run-card">
+        <h2>Run A</h2>
+        <div class="checkpoint">./checkpoints/models--Plachta--Seed-VC/snapshots/257283f9f41585055e8f858fba4fd044e5caed6e/DiT_seed_v2_uvit_whisper_base_f0_44k_bigvgan_pruned_ft_ema.pth</div>
+        <div class="run-meta">
+          <span>Cache: 20260331-110657</span>
+          <span>Generated: 37</span>
+          <span>Total: 37</span>
+          <span><a href="manifests/run_a/metrics_manifest.json">metrics_manifest.json</a></span>
+          <span><a href="manifests/run_a/results_manifest.json">results_manifest.json</a></span>
+        </div>
+        <div class="run-metric-strip">
+          
+          
+          <div class="mini-card">
+            <div class="eyebrow">Timbre</div>
+            <div class="mini-value">0.7829</div>
+            <div class="status">Rows scored: 37</div>
+          </div>
+          
+          
+          <div class="mini-card">
+            <div class="eyebrow">F0 RMSE</div>
+            <div class="mini-value">21.764</div>
+            <div class="status">Rows scored: 37</div>
+          </div>
+          
+          
+          <div class="mini-card">
+            <div class="eyebrow">F0 corr</div>
+            <div class="mini-value">0.9336</div>
+            <div class="status">Rows scored: 37</div>
+          </div>
+          
+          
+          <div class="mini-card">
+            <div class="eyebrow">SingMOS</div>
+            <div class="mini-value">3.7580</div>
+            <div class="status">Rows scored: 36</div>
+          </div>
+          
+        </div>
+      </article>
+      
+      <article class="run-card">
+        <h2>Run B</h2>
+        <div class="checkpoint">runs/my_run-hydra-nfdsnflksdjflkds_2026-03-31_09-33-42/DiT_epoch_00055_step_09500.pth</div>
+        <div class="run-meta">
+          <span>Cache: 20260331-105848</span>
+          <span>Generated: 37</span>
+          <span>Total: 37</span>
+          <span><a href="manifests/run_b/metrics_manifest.json">metrics_manifest.json</a></span>
+          <span><a href="manifests/run_b/results_manifest.json">results_manifest.json</a></span>
+        </div>
+        <div class="run-metric-strip">
+          
+          
+          <div class="mini-card">
+            <div class="eyebrow">Timbre</div>
+            <div class="mini-value">0.8903</div>
+            <div class="status">Rows scored: 37</div>
+          </div>
+          
+          
+          <div class="mini-card">
+            <div class="eyebrow">F0 RMSE</div>
+            <div class="mini-value">23.197</div>
+            <div class="status">Rows scored: 37</div>
+          </div>
+          
+          
+          <div class="mini-card">
+            <div class="eyebrow">F0 corr</div>
+            <div class="mini-value">0.9220</div>
+            <div class="status">Rows scored: 37</div>
+          </div>
+          
+          
+          <div class="mini-card">
+            <div class="eyebrow">SingMOS</div>
+            <div class="mini-value">3.5421</div>
+            <div class="status">Rows scored: 36</div>
+          </div>
+          
+        </div>
+      </article>
+      
+    </section>
+
+    <section class="panel controls">
+      <label>
+        Metric focus
+        <select id="metricSelect"></select>
+      </label>
       <label>
         Sort rows
         <select id="sortOrder">
-          <option value="delta-desc">Delta high to low</option>
-          <option value="delta-asc">Delta low to high</option>
-          <option value="run-b-desc">Run B high to low</option>
-          <option value="run-a-desc">Run A high to low</option>
+          <option value="delta-best">Largest improvement</option>
+          <option value="delta-worst">Largest regression</option>
+          <option value="run-b-best">Best Run B</option>
+          <option value="run-a-best">Best Run A</option>
           <option value="original">Original order</option>
         </select>
-      </label>
-      <label>
-        Min run A metric
-        <input id="minRunA" type="number" step="0.0001" placeholder="e.g. 0.8000">
-      </label>
-      <label>
-        Min run B metric
-        <input id="minRunB" type="number" step="0.0001" placeholder="e.g. 0.8000">
       </label>
       <label>
         Require both runs
         <select id="requireBoth">
           <option value="no">No</option>
           <option value="yes">Yes</option>
+        </select>
+      </label>
+      <label>
+        Status filter
+        <select id="statusFilter">
+          <option value="all">All rows</option>
+          <option value="ok">Only scored in both runs</option>
+          <option value="issues">Only rows with issues</option>
         </select>
       </label>
       <button id="clearFilters" type="button">Reset</button>
@@ -339,544 +399,157 @@
             <th>Delta</th>
           </tr>
         </thead>
-        <tbody id="rows">
-          
-          <tr
-            data-order="0"
-            data-run-a="0.8043721318244934"
-            data-run-b="0.7528656721115112"
-            data-delta="-0.05150645971298218"
-            data-has-both="true"
-          >
-            <td>1</td>
-            <td>
-              <div class="file-label">000017_BMI_UK16050016_chernihiv_sofiivka_MIC03.flac</div>
-              <div class="subtle">target: 000017_mixture.flac</div>
-            </td>
-            <td>
-              <div class="file-label">000017_BMI_UK16050016_chernihiv_sofiivka_MIC03</div>
-              <audio controls preload="none" src="audio/shared/source/-4L87nEO4N4__-4L87nEO4N4_000017_BMI_UK16050016_chernihiv_sofiivka_MIC03.mp3"></audio>
-            </td>
-            <td>
-              <div class="file-label">000017_mixture</div>
-              <audio controls preload="none" src="audio/shared/target/-4L87nEO4N4__-4L87nEO4N4_000017_mixture.mp3"></audio>
-            </td>
-            <td>
-              
-              <div class="metric-pill">0.8044</div>
-              <div class="status">
-                generation=generated, metric=ok
-                
-              </div>
-              <audio controls preload="none" src="audio/run_a/generated/20260314-032108__000017_BMI_UK16050016_chernihiv_sofiivka_MIC03.mp3"></audio>
-              
-            </td>
-            <td>
-              
-              <div class="metric-pill">0.7529</div>
-              <div class="status">
-                generation=generated, metric=ok
-                
-              </div>
-              <audio controls preload="none" src="audio/run_b/generated/20260317-160236__000017_BMI_UK16050016_chernihiv_sofiivka_MIC03.mp3"></audio>
-              
-            </td>
-            <td>
-              
-              
-                
-              
-              <div class="metric-pill delta-down">-0.0515</div>
-              <div class="subtle">Run B - Run A</div>
-            </td>
-          </tr>
-          
-          <tr
-            data-order="1"
-            data-run-a="0.809120237827301"
-            data-run-b="0.7416223287582397"
-            data-delta="-0.06749790906906128"
-            data-has-both="true"
-          >
-            <td>2</td>
-            <td>
-              <div class="file-label">000005_BMI_UK20080216_ivano-frankivsk_pidvynnya_MIC03.flac</div>
-              <div class="subtle">target: 000005_mixture.flac</div>
-            </td>
-            <td>
-              <div class="file-label">000005_BMI_UK20080216_ivano-frankivsk_pidvynnya_MIC03</div>
-              <audio controls preload="none" src="audio/shared/source/-kcWnHngJMA__-kcWnHngJMA_000005_BMI_UK20080216_ivano-frankivsk_pidvynnya_MIC03.mp3"></audio>
-            </td>
-            <td>
-              <div class="file-label">000005_mixture</div>
-              <audio controls preload="none" src="audio/shared/target/-kcWnHngJMA__-kcWnHngJMA_000005_mixture.mp3"></audio>
-            </td>
-            <td>
-              
-              <div class="metric-pill">0.8091</div>
-              <div class="status">
-                generation=generated, metric=ok
-                
-              </div>
-              <audio controls preload="none" src="audio/run_a/generated/20260314-032108__000005_BMI_UK20080216_ivano-frankivsk_pidvynnya_MIC03.mp3"></audio>
-              
-            </td>
-            <td>
-              
-              <div class="metric-pill">0.7416</div>
-              <div class="status">
-                generation=generated, metric=ok
-                
-              </div>
-              <audio controls preload="none" src="audio/run_b/generated/20260317-160236__000005_BMI_UK20080216_ivano-frankivsk_pidvynnya_MIC03.mp3"></audio>
-              
-            </td>
-            <td>
-              
-              
-                
-              
-              <div class="metric-pill delta-down">-0.0675</div>
-              <div class="subtle">Run B - Run A</div>
-            </td>
-          </tr>
-          
-          <tr
-            data-order="2"
-            data-run-a="0.8794981837272644"
-            data-run-b="0.8378115892410278"
-            data-delta="-0.04168659448623657"
-            data-has-both="true"
-          >
-            <td>3</td>
-            <td>
-              <div class="file-label">000006_BMI_UK17100190_kherson_bekhtery_MIC01.flac</div>
-              <div class="subtle">target: 000006_mixture.flac</div>
-            </td>
-            <td>
-              <div class="file-label">000006_BMI_UK17100190_kherson_bekhtery_MIC01</div>
-              <audio controls preload="none" src="audio/shared/source/-oYOExW80Ps__-oYOExW80Ps_000006_BMI_UK17100190_kherson_bekhtery_MIC01.mp3"></audio>
-            </td>
-            <td>
-              <div class="file-label">000006_mixture</div>
-              <audio controls preload="none" src="audio/shared/target/-oYOExW80Ps__-oYOExW80Ps_000006_mixture.mp3"></audio>
-            </td>
-            <td>
-              
-              <div class="metric-pill">0.8795</div>
-              <div class="status">
-                generation=generated, metric=ok
-                
-              </div>
-              <audio controls preload="none" src="audio/run_a/generated/20260314-032108__000006_BMI_UK17100190_kherson_bekhtery_MIC01.mp3"></audio>
-              
-            </td>
-            <td>
-              
-              <div class="metric-pill">0.8378</div>
-              <div class="status">
-                generation=generated, metric=ok
-                
-              </div>
-              <audio controls preload="none" src="audio/run_b/generated/20260317-160236__000006_BMI_UK17100190_kherson_bekhtery_MIC01.mp3"></audio>
-              
-            </td>
-            <td>
-              
-              
-                
-              
-              <div class="metric-pill delta-down">-0.0417</div>
-              <div class="subtle">Run B - Run A</div>
-            </td>
-          </tr>
-          
-          <tr
-            data-order="3"
-            data-run-a="0.8163633346557617"
-            data-run-b="0.6924203038215637"
-            data-delta="-0.123943030834198"
-            data-has-both="true"
-          >
-            <td>4</td>
-            <td>
-              <div class="file-label">000019_BMI_UK17100724_khmelnytskyi_zeleni_kurylivtsi_MIC05.flac</div>
-              <div class="subtle">target: 000019_mixture.flac</div>
-            </td>
-            <td>
-              <div class="file-label">000019_BMI_UK17100724_khmelnytskyi_zeleni_kurylivtsi_MIC05</div>
-              <audio controls preload="none" src="audio/shared/source/0qeXKXMmvL4__0qeXKXMmvL4_000019_BMI_UK17100724_khmelnytskyi_zeleni_kurylivtsi_MIC05.mp3"></audio>
-            </td>
-            <td>
-              <div class="file-label">000019_mixture</div>
-              <audio controls preload="none" src="audio/shared/target/0qeXKXMmvL4__0qeXKXMmvL4_000019_mixture.mp3"></audio>
-            </td>
-            <td>
-              
-              <div class="metric-pill">0.8164</div>
-              <div class="status">
-                generation=generated, metric=ok
-                
-              </div>
-              <audio controls preload="none" src="audio/run_a/generated/20260314-032108__000019_BMI_UK17100724_khmelnytskyi_zeleni_kurylivtsi_MIC05.mp3"></audio>
-              
-            </td>
-            <td>
-              
-              <div class="metric-pill">0.6924</div>
-              <div class="status">
-                generation=generated, metric=ok
-                
-              </div>
-              <audio controls preload="none" src="audio/run_b/generated/20260317-160236__000019_BMI_UK17100724_khmelnytskyi_zeleni_kurylivtsi_MIC05.mp3"></audio>
-              
-            </td>
-            <td>
-              
-              
-                
-              
-              <div class="metric-pill delta-down">-0.1239</div>
-              <div class="subtle">Run B - Run A</div>
-            </td>
-          </tr>
-          
-          <tr
-            data-order="4"
-            data-run-a="0.8402347564697266"
-            data-run-b="0.7824185490608215"
-            data-delta="-0.05781620740890503"
-            data-has-both="true"
-          >
-            <td>5</td>
-            <td>
-              <div class="file-label">000020_BMI_UK16050184_dnipropetrovsk_pidhorodne_MIC02.flac</div>
-              <div class="subtle">target: 000020_mixture.flac</div>
-            </td>
-            <td>
-              <div class="file-label">000020_BMI_UK16050184_dnipropetrovsk_pidhorodne_MIC02</div>
-              <audio controls preload="none" src="audio/shared/source/0xczykQot4E__0xczykQot4E_000020_BMI_UK16050184_dnipropetrovsk_pidhorodne_MIC02.mp3"></audio>
-            </td>
-            <td>
-              <div class="file-label">000020_mixture</div>
-              <audio controls preload="none" src="audio/shared/target/0xczykQot4E__0xczykQot4E_000020_mixture.mp3"></audio>
-            </td>
-            <td>
-              
-              <div class="metric-pill">0.8402</div>
-              <div class="status">
-                generation=generated, metric=ok
-                
-              </div>
-              <audio controls preload="none" src="audio/run_a/generated/20260314-032108__000020_BMI_UK16050184_dnipropetrovsk_pidhorodne_MIC02.mp3"></audio>
-              
-            </td>
-            <td>
-              
-              <div class="metric-pill">0.7824</div>
-              <div class="status">
-                generation=generated, metric=ok
-                
-              </div>
-              <audio controls preload="none" src="audio/run_b/generated/20260317-160236__000020_BMI_UK16050184_dnipropetrovsk_pidhorodne_MIC02.mp3"></audio>
-              
-            </td>
-            <td>
-              
-              
-                
-              
-              <div class="metric-pill delta-down">-0.0578</div>
-              <div class="subtle">Run B - Run A</div>
-            </td>
-          </tr>
-          
-          <tr
-            data-order="5"
-            data-run-a="0.8294225335121155"
-            data-run-b="0.7578389048576355"
-            data-delta="-0.07158362865447998"
-            data-has-both="true"
-          >
-            <td>6</td>
-            <td>
-              <div class="file-label">000001_BMI_UK16100032_kiev_fasova_MIC02.flac</div>
-              <div class="subtle">target: 000001_mixture.flac</div>
-            </td>
-            <td>
-              <div class="file-label">000001_BMI_UK16100032_kiev_fasova_MIC02</div>
-              <audio controls preload="none" src="audio/shared/source/0zQ1XXJPORA__0zQ1XXJPORA_000001_BMI_UK16100032_kiev_fasova_MIC02.mp3"></audio>
-            </td>
-            <td>
-              <div class="file-label">000001_mixture</div>
-              <audio controls preload="none" src="audio/shared/target/0zQ1XXJPORA__0zQ1XXJPORA_000001_mixture.mp3"></audio>
-            </td>
-            <td>
-              
-              <div class="metric-pill">0.8294</div>
-              <div class="status">
-                generation=generated, metric=ok
-                
-              </div>
-              <audio controls preload="none" src="audio/run_a/generated/20260314-032108__000001_BMI_UK16100032_kiev_fasova_MIC02.mp3"></audio>
-              
-            </td>
-            <td>
-              
-              <div class="metric-pill">0.7578</div>
-              <div class="status">
-                generation=generated, metric=ok
-                
-              </div>
-              <audio controls preload="none" src="audio/run_b/generated/20260317-160236__000001_BMI_UK16100032_kiev_fasova_MIC02.mp3"></audio>
-              
-            </td>
-            <td>
-              
-              
-                
-              
-              <div class="metric-pill delta-down">-0.0716</div>
-              <div class="subtle">Run B - Run A</div>
-            </td>
-          </tr>
-          
-          <tr
-            data-order="6"
-            data-run-a="0.7871630191802979"
-            data-run-b="0.769773542881012"
-            data-delta="-0.01738947629928589"
-            data-has-both="true"
-          >
-            <td>7</td>
-            <td>
-              <div class="file-label">000022_BMI_UK16100158_chernihiv_karylsky_MIC03.flac</div>
-              <div class="subtle">target: 000022_mixture.flac</div>
-            </td>
-            <td>
-              <div class="file-label">000022_BMI_UK16100158_chernihiv_karylsky_MIC03</div>
-              <audio controls preload="none" src="audio/shared/source/2XfpKIehW-c__2XfpKIehW-c_000022_BMI_UK16100158_chernihiv_karylsky_MIC03.mp3"></audio>
-            </td>
-            <td>
-              <div class="file-label">000022_mixture</div>
-              <audio controls preload="none" src="audio/shared/target/2XfpKIehW-c__2XfpKIehW-c_000022_mixture.mp3"></audio>
-            </td>
-            <td>
-              
-              <div class="metric-pill">0.7872</div>
-              <div class="status">
-                generation=generated, metric=ok
-                
-              </div>
-              <audio controls preload="none" src="audio/run_a/generated/20260314-032108__000022_BMI_UK16100158_chernihiv_karylsky_MIC03.mp3"></audio>
-              
-            </td>
-            <td>
-              
-              <div class="metric-pill">0.7698</div>
-              <div class="status">
-                generation=generated, metric=ok
-                
-              </div>
-              <audio controls preload="none" src="audio/run_b/generated/20260317-160236__000022_BMI_UK16100158_chernihiv_karylsky_MIC03.mp3"></audio>
-              
-            </td>
-            <td>
-              
-              
-                
-              
-              <div class="metric-pill delta-down">-0.0174</div>
-              <div class="subtle">Run B - Run A</div>
-            </td>
-          </tr>
-          
-          <tr
-            data-order="7"
-            data-run-a="0.8582451343536377"
-            data-run-b="0.7180139422416687"
-            data-delta="-0.140231192111969"
-            data-has-both="true"
-          >
-            <td>8</td>
-            <td>
-              <div class="file-label">000011_BMI_UK15070071_poltava_solonytsya_MIC01.flac</div>
-              <div class="subtle">target: 000011_mixture.flac</div>
-            </td>
-            <td>
-              <div class="file-label">000011_BMI_UK15070071_poltava_solonytsya_MIC01</div>
-              <audio controls preload="none" src="audio/shared/source/3MQoX6em51E__3MQoX6em51E_000011_BMI_UK15070071_poltava_solonytsya_MIC01.mp3"></audio>
-            </td>
-            <td>
-              <div class="file-label">000011_mixture</div>
-              <audio controls preload="none" src="audio/shared/target/3MQoX6em51E__3MQoX6em51E_000011_mixture.mp3"></audio>
-            </td>
-            <td>
-              
-              <div class="metric-pill">0.8582</div>
-              <div class="status">
-                generation=generated, metric=ok
-                
-              </div>
-              <audio controls preload="none" src="audio/run_a/generated/20260314-032108__000011_BMI_UK15070071_poltava_solonytsya_MIC01.mp3"></audio>
-              
-            </td>
-            <td>
-              
-              <div class="metric-pill">0.7180</div>
-              <div class="status">
-                generation=generated, metric=ok
-                
-              </div>
-              <audio controls preload="none" src="audio/run_b/generated/20260317-160236__000011_BMI_UK15070071_poltava_solonytsya_MIC01.mp3"></audio>
-              
-            </td>
-            <td>
-              
-              
-                
-              
-              <div class="metric-pill delta-down">-0.1402</div>
-              <div class="subtle">Run B - Run A</div>
-            </td>
-          </tr>
-          
-          <tr
-            data-order="8"
-            data-run-a="0.7793539762496948"
-            data-run-b="0.665848970413208"
-            data-delta="-0.11350500583648682"
-            data-has-both="true"
-          >
-            <td>9</td>
-            <td>
-              <div class="file-label">000018_BMI_UK15070071_poltava_solonytsya_MIC03.flac</div>
-              <div class="subtle">target: 000018_mixture.flac</div>
-            </td>
-            <td>
-              <div class="file-label">000018_BMI_UK15070071_poltava_solonytsya_MIC03</div>
-              <audio controls preload="none" src="audio/shared/source/3MQoX6em51E__3MQoX6em51E_000018_BMI_UK15070071_poltava_solonytsya_MIC03.mp3"></audio>
-            </td>
-            <td>
-              <div class="file-label">000018_mixture</div>
-              <audio controls preload="none" src="audio/shared/target/3MQoX6em51E__3MQoX6em51E_000018_mixture.mp3"></audio>
-            </td>
-            <td>
-              
-              <div class="metric-pill">0.7794</div>
-              <div class="status">
-                generation=generated, metric=ok
-                
-              </div>
-              <audio controls preload="none" src="audio/run_a/generated/20260314-032108__000018_BMI_UK15070071_poltava_solonytsya_MIC03.mp3"></audio>
-              
-            </td>
-            <td>
-              
-              <div class="metric-pill">0.6658</div>
-              <div class="status">
-                generation=generated, metric=ok
-                
-              </div>
-              <audio controls preload="none" src="audio/run_b/generated/20260317-160236__000018_BMI_UK15070071_poltava_solonytsya_MIC03.mp3"></audio>
-              
-            </td>
-            <td>
-              
-              
-                
-              
-              <div class="metric-pill delta-down">-0.1135</div>
-              <div class="subtle">Run B - Run A</div>
-            </td>
-          </tr>
-          
-        </tbody>
+        <tbody id="rows"></tbody>
       </table>
     </section>
   </div>
 
   <script>
-    const tbody = document.getElementById('rows');
-    const rows = Array.from(tbody.querySelectorAll('tr'));
+    const defaultMetricKey = "resemblyzer_similarity";
+    const metrics = [{"category": "Timbre similarity", "description": "Cosine similarity between target and generated Resemblyzer embeddings.", "direction": "higher", "key": "resemblyzer_similarity", "label": "Resemblyzer similarity", "short_label": "Timbre"}, {"category": "Melody preservation", "description": "Root-mean-square error between aligned source and generated F0 contours.", "direction": "lower", "key": "f0_rmse", "label": "F0 RMSE", "short_label": "F0 RMSE"}, {"category": "Melody preservation", "description": "Pearson correlation between aligned source and generated F0 contours.", "direction": "higher", "key": "f0_correlation", "label": "F0 correlation", "short_label": "F0 corr"}, {"category": "Naturalness", "description": "Mean SingMOS-Pro score across 5-second generated-audio chunks.", "direction": "higher", "key": "singmos_naturalness", "label": "SingMOS naturalness", "short_label": "SingMOS"}];
+    const rows = [{"deltas": {"f0_correlation": {"display": "0.0643", "value": 0.06431907539333293}, "f0_rmse": {"display": "-8.897", "value": -8.897207260131836}, "resemblyzer_similarity": {"display": "0.0964", "value": 0.09643954038619995}, "singmos_naturalness": {"display": "0.0001", "value": 7.05718994140625e-05}}, "has_both_runs": true, "index": 1, "item_key": "data/processed/GCTaae0LLDM/000000_BMI_UK18060061_zhytomyr_kalinivka_MIC01.flac::data/processed/GCTaae0LLDM/000000_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000000_BMI_UK18060061_zhytomyr_kalinivka_MIC01.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.8684", "error": null, "sort_value": 0.8683904339731965, "status": "ok", "value": 0.8683904339731965}, "f0_rmse": {"display": "29.196", "error": null, "sort_value": -29.196470260620117, "status": "ok", "value": 29.196470260620117}, "resemblyzer_similarity": {"display": "0.7557", "error": null, "sort_value": 0.7556936740875244, "status": "ok", "value": 0.7556936740875244}, "singmos_naturalness": {"display": "4.3646", "error": null, "sort_value": 4.364583969116211, "status": "ok", "value": 4.364583969116211}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000000_BMI_UK18060061_zhytomyr_kalinivka_MIC01.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9327", "error": null, "sort_value": 0.9327095093665294, "status": "ok", "value": 0.9327095093665294}, "f0_rmse": {"display": "20.299", "error": null, "sort_value": -20.29926300048828, "status": "ok", "value": 20.29926300048828}, "resemblyzer_similarity": {"display": "0.8521", "error": null, "sort_value": 0.8521332144737244, "status": "ok", "value": 0.8521332144737244}, "singmos_naturalness": {"display": "4.3647", "error": null, "sort_value": 4.364654541015625, "status": "ok", "value": 4.364654541015625}}}, "source_label": "000000_BMI_UK18060061_zhytomyr_kalinivka_MIC01", "source_name": "000000_BMI_UK18060061_zhytomyr_kalinivka_MIC01.flac", "source_path": "audio/shared/source/GCTaae0LLDM__GCTaae0LLDM_000000_BMI_UK18060061_zhytomyr_kalinivka_MIC01.mp3", "target_label": "000000_mixture", "target_name": "000000_mixture.flac", "target_path": "audio/shared/target/GCTaae0LLDM__GCTaae0LLDM_000000_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "-0.5422", "value": -0.5421923925823655}, "f0_rmse": {"display": "54.878", "value": 54.87800979614258}, "resemblyzer_similarity": {"display": "0.1374", "value": 0.13735145330429077}, "singmos_naturalness": {"display": "-0.3214", "value": -0.32140660285949707}}, "has_both_runs": true, "index": 2, "item_key": "data/processed/PfYetbLkk5c/000008_BMI_UK15070075_poltava_solonytsya_MIC01.flac::data/processed/PfYetbLkk5c/000008_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000008_BMI_UK15070075_poltava_solonytsya_MIC01.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.8102", "error": null, "sort_value": 0.8102308632816749, "status": "ok", "value": 0.8102308632816749}, "f0_rmse": {"display": "26.307", "error": null, "sort_value": -26.307315826416016, "status": "ok", "value": 26.307315826416016}, "resemblyzer_similarity": {"display": "0.7794", "error": null, "sort_value": 0.7794008255004883, "status": "ok", "value": 0.7794008255004883}, "singmos_naturalness": {"display": "3.0921", "error": null, "sort_value": 3.0920705795288086, "status": "ok", "value": 3.0920705795288086}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000008_BMI_UK15070075_poltava_solonytsya_MIC01.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.2680", "error": null, "sort_value": 0.26803847069930936, "status": "ok", "value": 0.26803847069930936}, "f0_rmse": {"display": "81.185", "error": null, "sort_value": -81.1853256225586, "status": "ok", "value": 81.1853256225586}, "resemblyzer_similarity": {"display": "0.9168", "error": null, "sort_value": 0.916752278804779, "status": "ok", "value": 0.916752278804779}, "singmos_naturalness": {"display": "2.7707", "error": null, "sort_value": 2.7706639766693115, "status": "ok", "value": 2.7706639766693115}}}, "source_label": "000008_BMI_UK15070075_poltava_solonytsya_MIC01", "source_name": "000008_BMI_UK15070075_poltava_solonytsya_MIC01.flac", "source_path": "audio/shared/source/PfYetbLkk5c__PfYetbLkk5c_000008_BMI_UK15070075_poltava_solonytsya_MIC01.mp3", "target_label": "000008_mixture", "target_name": "000008_mixture.flac", "target_path": "audio/shared/target/PfYetbLkk5c__PfYetbLkk5c_000008_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "-0.0037", "value": -0.0037235620934018554}, "f0_rmse": {"display": "0.788", "value": 0.7875995635986328}, "resemblyzer_similarity": {"display": "0.1133", "value": 0.11331790685653687}, "singmos_naturalness": {"display": "-0.2297", "value": -0.22966837882995605}}, "has_both_runs": true, "index": 3, "item_key": "data/processed/PlIjo-YzNIA/000000_BMI_UK18090318_sumy_burin_MIC01.flac::data/processed/PlIjo-YzNIA/000000_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000000_BMI_UK18090318_sumy_burin_MIC01.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9534", "error": null, "sort_value": 0.9534078053510355, "status": "ok", "value": 0.9534078053510355}, "f0_rmse": {"display": "15.059", "error": null, "sort_value": -15.0594482421875, "status": "ok", "value": 15.0594482421875}, "resemblyzer_similarity": {"display": "0.7733", "error": null, "sort_value": 0.7733416557312012, "status": "ok", "value": 0.7733416557312012}, "singmos_naturalness": {"display": "4.2154", "error": null, "sort_value": 4.21541690826416, "status": "ok", "value": 4.21541690826416}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000000_BMI_UK18090318_sumy_burin_MIC01.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9497", "error": null, "sort_value": 0.9496842432576337, "status": "ok", "value": 0.9496842432576337}, "f0_rmse": {"display": "15.847", "error": null, "sort_value": -15.847047805786133, "status": "ok", "value": 15.847047805786133}, "resemblyzer_similarity": {"display": "0.8867", "error": null, "sort_value": 0.886659562587738, "status": "ok", "value": 0.886659562587738}, "singmos_naturalness": {"display": "3.9857", "error": null, "sort_value": 3.985748529434204, "status": "ok", "value": 3.985748529434204}}}, "source_label": "000000_BMI_UK18090318_sumy_burin_MIC01", "source_name": "000000_BMI_UK18090318_sumy_burin_MIC01.flac", "source_path": "audio/shared/source/PlIjo-YzNIA__PlIjo-YzNIA_000000_BMI_UK18090318_sumy_burin_MIC01.mp3", "target_label": "000000_mixture", "target_name": "000000_mixture.flac", "target_path": "audio/shared/target/PlIjo-YzNIA__PlIjo-YzNIA_000000_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "-0.0061", "value": -0.006133847316323493}, "f0_rmse": {"display": "0.366", "value": 0.36624908447265625}, "resemblyzer_similarity": {"display": "0.1061", "value": 0.10607624053955078}, "singmos_naturalness": {"display": "0.0619", "value": 0.061858415603637695}}, "has_both_runs": true, "index": 4, "item_key": "data/processed/PlIjo-YzNIA/000000_BMI_UK18090318_sumy_burin_MIC02.flac::data/processed/PlIjo-YzNIA/000000_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000000_BMI_UK18090318_sumy_burin_MIC02.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9460", "error": null, "sort_value": 0.9460206831078185, "status": "ok", "value": 0.9460206831078185}, "f0_rmse": {"display": "61.302", "error": null, "sort_value": -61.30223083496094, "status": "ok", "value": 61.30223083496094}, "resemblyzer_similarity": {"display": "0.7340", "error": null, "sort_value": 0.7339608073234558, "status": "ok", "value": 0.7339608073234558}, "singmos_naturalness": {"display": "3.8579", "error": null, "sort_value": 3.8578858375549316, "status": "ok", "value": 3.8578858375549316}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000000_BMI_UK18090318_sumy_burin_MIC02.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9399", "error": null, "sort_value": 0.939886835791495, "status": "ok", "value": 0.939886835791495}, "f0_rmse": {"display": "61.668", "error": null, "sort_value": -61.668479919433594, "status": "ok", "value": 61.668479919433594}, "resemblyzer_similarity": {"display": "0.8400", "error": null, "sort_value": 0.8400370478630066, "status": "ok", "value": 0.8400370478630066}, "singmos_naturalness": {"display": "3.9197", "error": null, "sort_value": 3.9197442531585693, "status": "ok", "value": 3.9197442531585693}}}, "source_label": "000000_BMI_UK18090318_sumy_burin_MIC02", "source_name": "000000_BMI_UK18090318_sumy_burin_MIC02.flac", "source_path": "audio/shared/source/PlIjo-YzNIA__PlIjo-YzNIA_000000_BMI_UK18090318_sumy_burin_MIC02.mp3", "target_label": "000000_mixture", "target_name": "000000_mixture.flac", "target_path": "audio/shared/target/PlIjo-YzNIA__PlIjo-YzNIA_000000_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "-0.0006", "value": -0.0006061797862283447}, "f0_rmse": {"display": "-0.265", "value": -0.2652473449707031}, "resemblyzer_similarity": {"display": "0.0614", "value": 0.061351656913757324}, "singmos_naturalness": {"display": "-0.2993", "value": -0.299252986907959}}, "has_both_runs": true, "index": 5, "item_key": "data/processed/PlIjo-YzNIA/000000_BMI_UK18090318_sumy_burin_MIC04.flac::data/processed/PlIjo-YzNIA/000000_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000000_BMI_UK18090318_sumy_burin_MIC04.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9725", "error": null, "sort_value": 0.972507193567919, "status": "ok", "value": 0.972507193567919}, "f0_rmse": {"display": "17.306", "error": null, "sort_value": -17.306421279907227, "status": "ok", "value": 17.306421279907227}, "resemblyzer_similarity": {"display": "0.7961", "error": null, "sort_value": 0.796054482460022, "status": "ok", "value": 0.796054482460022}, "singmos_naturalness": {"display": "4.3465", "error": null, "sort_value": 4.346497058868408, "status": "ok", "value": 4.346497058868408}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000000_BMI_UK18090318_sumy_burin_MIC04.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9719", "error": null, "sort_value": 0.9719010137816907, "status": "ok", "value": 0.9719010137816907}, "f0_rmse": {"display": "17.041", "error": null, "sort_value": -17.041173934936523, "status": "ok", "value": 17.041173934936523}, "resemblyzer_similarity": {"display": "0.8574", "error": null, "sort_value": 0.8574061393737793, "status": "ok", "value": 0.8574061393737793}, "singmos_naturalness": {"display": "4.0472", "error": null, "sort_value": 4.047244071960449, "status": "ok", "value": 4.047244071960449}}}, "source_label": "000000_BMI_UK18090318_sumy_burin_MIC04", "source_name": "000000_BMI_UK18090318_sumy_burin_MIC04.flac", "source_path": "audio/shared/source/PlIjo-YzNIA__PlIjo-YzNIA_000000_BMI_UK18090318_sumy_burin_MIC04.mp3", "target_label": "000000_mixture", "target_name": "000000_mixture.flac", "target_path": "audio/shared/target/PlIjo-YzNIA__PlIjo-YzNIA_000000_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "0.0018", "value": 0.001815887788395587}, "f0_rmse": {"display": "10.914", "value": 10.914054870605469}, "resemblyzer_similarity": {"display": "0.1204", "value": 0.12040132284164429}, "singmos_naturalness": {"display": "-0.1598", "value": -0.1598207950592041}}, "has_both_runs": true, "index": 6, "item_key": "data/processed/Q5X7K-Jc85Q/000001_BMI_UK15070074_poltava_solonytsya_MIC01.flac::data/processed/Q5X7K-Jc85Q/000001_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000001_BMI_UK15070074_poltava_solonytsya_MIC01.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.6568", "error": null, "sort_value": 0.6568134455831101, "status": "ok", "value": 0.6568134455831101}, "f0_rmse": {"display": "73.147", "error": null, "sort_value": -73.14663696289062, "status": "ok", "value": 73.14663696289062}, "resemblyzer_similarity": {"display": "0.7996", "error": null, "sort_value": 0.7995790243148804, "status": "ok", "value": 0.7995790243148804}, "singmos_naturalness": {"display": "2.5917", "error": null, "sort_value": 2.5917038917541504, "status": "ok", "value": 2.5917038917541504}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000001_BMI_UK15070074_poltava_solonytsya_MIC01.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.6586", "error": null, "sort_value": 0.6586293333715056, "status": "ok", "value": 0.6586293333715056}, "f0_rmse": {"display": "84.061", "error": null, "sort_value": -84.0606918334961, "status": "ok", "value": 84.0606918334961}, "resemblyzer_similarity": {"display": "0.9200", "error": null, "sort_value": 0.9199803471565247, "status": "ok", "value": 0.9199803471565247}, "singmos_naturalness": {"display": "2.4319", "error": null, "sort_value": 2.4318830966949463, "status": "ok", "value": 2.4318830966949463}}}, "source_label": "000001_BMI_UK15070074_poltava_solonytsya_MIC01", "source_name": "000001_BMI_UK15070074_poltava_solonytsya_MIC01.flac", "source_path": "audio/shared/source/Q5X7K-Jc85Q__Q5X7K-Jc85Q_000001_BMI_UK15070074_poltava_solonytsya_MIC01.mp3", "target_label": "000001_mixture", "target_name": "000001_mixture.flac", "target_path": "audio/shared/target/Q5X7K-Jc85Q__Q5X7K-Jc85Q_000001_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "-0.0040", "value": -0.003959254752352481}, "f0_rmse": {"display": "0.612", "value": 0.6121330261230469}, "resemblyzer_similarity": {"display": "0.0965", "value": 0.09649348258972168}, "singmos_naturalness": {"display": "-0.4323", "value": -0.43227100372314453}}, "has_both_runs": true, "index": 7, "item_key": "data/processed/RqzLIR_lhzM/000000_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC02.flac::data/processed/RqzLIR_lhzM/000000_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000000_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC02.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9495", "error": null, "sort_value": 0.9495195194615383, "status": "ok", "value": 0.9495195194615383}, "f0_rmse": {"display": "22.574", "error": null, "sort_value": -22.57406997680664, "status": "ok", "value": 22.57406997680664}, "resemblyzer_similarity": {"display": "0.8261", "error": null, "sort_value": 0.8260782361030579, "status": "ok", "value": 0.8260782361030579}, "singmos_naturalness": {"display": "3.7253", "error": null, "sort_value": 3.7253036499023438, "status": "ok", "value": 3.7253036499023438}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000000_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC02.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9456", "error": null, "sort_value": 0.9455602647091859, "status": "ok", "value": 0.9455602647091859}, "f0_rmse": {"display": "23.186", "error": null, "sort_value": -23.186203002929688, "status": "ok", "value": 23.186203002929688}, "resemblyzer_similarity": {"display": "0.9226", "error": null, "sort_value": 0.9225717186927795, "status": "ok", "value": 0.9225717186927795}, "singmos_naturalness": {"display": "3.2930", "error": null, "sort_value": 3.293032646179199, "status": "ok", "value": 3.293032646179199}}}, "source_label": "000000_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC02", "source_name": "000000_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC02.flac", "source_path": "audio/shared/source/RqzLIR_lhzM__RqzLIR_lhzM_000000_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC02.mp3", "target_label": "000000_mixture", "target_name": "000000_mixture.flac", "target_path": "audio/shared/target/RqzLIR_lhzM__RqzLIR_lhzM_000000_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "0.0199", "value": 0.019869042757046262}, "f0_rmse": {"display": "-3.142", "value": -3.142411231994629}, "resemblyzer_similarity": {"display": "0.1021", "value": 0.10214722156524658}, "singmos_naturalness": {"display": "0.0007", "value": 0.0006592273712158203}}, "has_both_runs": true, "index": 8, "item_key": "data/processed/RqzLIR_lhzM/000000_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC05.flac::data/processed/RqzLIR_lhzM/000000_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000000_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC05.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9316", "error": null, "sort_value": 0.9315934731580554, "status": "ok", "value": 0.9315934731580554}, "f0_rmse": {"display": "18.027", "error": null, "sort_value": -18.026681900024414, "status": "ok", "value": 18.026681900024414}, "resemblyzer_similarity": {"display": "0.8219", "error": null, "sort_value": 0.8219296336174011, "status": "ok", "value": 0.8219296336174011}, "singmos_naturalness": {"display": "3.4297", "error": null, "sort_value": 3.429705858230591, "status": "ok", "value": 3.429705858230591}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000000_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC05.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9515", "error": null, "sort_value": 0.9514625159151017, "status": "ok", "value": 0.9514625159151017}, "f0_rmse": {"display": "14.884", "error": null, "sort_value": -14.884270668029785, "status": "ok", "value": 14.884270668029785}, "resemblyzer_similarity": {"display": "0.9241", "error": null, "sort_value": 0.9240768551826477, "status": "ok", "value": 0.9240768551826477}, "singmos_naturalness": {"display": "3.4304", "error": null, "sort_value": 3.4303650856018066, "status": "ok", "value": 3.4303650856018066}}}, "source_label": "000000_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC05", "source_name": "000000_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC05.flac", "source_path": "audio/shared/source/RqzLIR_lhzM__RqzLIR_lhzM_000000_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC05.mp3", "target_label": "000000_mixture", "target_name": "000000_mixture.flac", "target_path": "audio/shared/target/RqzLIR_lhzM__RqzLIR_lhzM_000000_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "0.0073", "value": 0.007288431604851042}, "f0_rmse": {"display": "-1.134", "value": -1.1344490051269531}, "resemblyzer_similarity": {"display": "0.1481", "value": 0.14809256792068481}, "singmos_naturalness": {"display": "-0.5145", "value": -0.5144741535186768}}, "has_both_runs": true, "index": 9, "item_key": "data/processed/RqzLIR_lhzM/000001_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC04.flac::data/processed/RqzLIR_lhzM/000001_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000001_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC04.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9261", "error": null, "sort_value": 0.9260603377221128, "status": "ok", "value": 0.9260603377221128}, "f0_rmse": {"display": "17.451", "error": null, "sort_value": -17.45072364807129, "status": "ok", "value": 17.45072364807129}, "resemblyzer_similarity": {"display": "0.7746", "error": null, "sort_value": 0.7746490240097046, "status": "ok", "value": 0.7746490240097046}, "singmos_naturalness": {"display": "4.0924", "error": null, "sort_value": 4.09244966506958, "status": "ok", "value": 4.09244966506958}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000001_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC04.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9333", "error": null, "sort_value": 0.9333487693269639, "status": "ok", "value": 0.9333487693269639}, "f0_rmse": {"display": "16.316", "error": null, "sort_value": -16.316274642944336, "status": "ok", "value": 16.316274642944336}, "resemblyzer_similarity": {"display": "0.9227", "error": null, "sort_value": 0.9227415919303894, "status": "ok", "value": 0.9227415919303894}, "singmos_naturalness": {"display": "3.5780", "error": null, "sort_value": 3.5779755115509033, "status": "ok", "value": 3.5779755115509033}}}, "source_label": "000001_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC04", "source_name": "000001_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC04.flac", "source_path": "audio/shared/source/RqzLIR_lhzM__RqzLIR_lhzM_000001_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC04.mp3", "target_label": "000001_mixture", "target_name": "000001_mixture.flac", "target_path": "audio/shared/target/RqzLIR_lhzM__RqzLIR_lhzM_000001_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "0.0177", "value": 0.01765835200375021}, "f0_rmse": {"display": "-0.799", "value": -0.798919677734375}, "resemblyzer_similarity": {"display": "0.1180", "value": 0.11803340911865234}, "singmos_naturalness": {"display": "-0.2423", "value": -0.2422800064086914}}, "has_both_runs": true, "index": 10, "item_key": "data/processed/RqzLIR_lhzM/000003_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC04.flac::data/processed/RqzLIR_lhzM/000003_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000003_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC04.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9361", "error": null, "sort_value": 0.93614122931051, "status": "ok", "value": 0.93614122931051}, "f0_rmse": {"display": "42.195", "error": null, "sort_value": -42.19528579711914, "status": "ok", "value": 42.19528579711914}, "resemblyzer_similarity": {"display": "0.8046", "error": null, "sort_value": 0.8045907616615295, "status": "ok", "value": 0.8045907616615295}, "singmos_naturalness": {"display": "3.4708", "error": null, "sort_value": 3.470755100250244, "status": "ok", "value": 3.470755100250244}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000003_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC04.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9538", "error": null, "sort_value": 0.9537995813142602, "status": "ok", "value": 0.9537995813142602}, "f0_rmse": {"display": "41.396", "error": null, "sort_value": -41.396366119384766, "status": "ok", "value": 41.396366119384766}, "resemblyzer_similarity": {"display": "0.9226", "error": null, "sort_value": 0.9226241707801819, "status": "ok", "value": 0.9226241707801819}, "singmos_naturalness": {"display": "3.2285", "error": null, "sort_value": 3.2284750938415527, "status": "ok", "value": 3.2284750938415527}}}, "source_label": "000003_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC04", "source_name": "000003_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC04.flac", "source_path": "audio/shared/source/RqzLIR_lhzM__RqzLIR_lhzM_000003_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC04.mp3", "target_label": "000003_mixture", "target_name": "000003_mixture.flac", "target_path": "audio/shared/target/RqzLIR_lhzM__RqzLIR_lhzM_000003_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "0.0009", "value": 0.0008599552694232848}, "f0_rmse": {"display": "-0.615", "value": -0.6145534515380859}, "resemblyzer_similarity": {"display": "0.0709", "value": 0.0708538293838501}, "singmos_naturalness": {"display": "-0.0781", "value": -0.07809185981750488}}, "has_both_runs": true, "index": 11, "item_key": "data/processed/T-pp2380F9c/000000_BMI_UK20080294_khmelnytskyi_lysets_MIC05.flac::data/processed/T-pp2380F9c/000000_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000000_BMI_UK20080294_khmelnytskyi_lysets_MIC05.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.8661", "error": null, "sort_value": 0.8660930407113123, "status": "ok", "value": 0.8660930407113123}, "f0_rmse": {"display": "19.824", "error": null, "sort_value": -19.824216842651367, "status": "ok", "value": 19.824216842651367}, "resemblyzer_similarity": {"display": "0.8236", "error": null, "sort_value": 0.8235875964164734, "status": "ok", "value": 0.8235875964164734}, "singmos_naturalness": {"display": "4.0565", "error": null, "sort_value": 4.056519031524658, "status": "ok", "value": 4.056519031524658}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000000_BMI_UK20080294_khmelnytskyi_lysets_MIC05.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.8670", "error": null, "sort_value": 0.8669529959807356, "status": "ok", "value": 0.8669529959807356}, "f0_rmse": {"display": "19.210", "error": null, "sort_value": -19.20966339111328, "status": "ok", "value": 19.20966339111328}, "resemblyzer_similarity": {"display": "0.8944", "error": null, "sort_value": 0.8944414258003235, "status": "ok", "value": 0.8944414258003235}, "singmos_naturalness": {"display": "3.9784", "error": null, "sort_value": 3.9784271717071533, "status": "ok", "value": 3.9784271717071533}}}, "source_label": "000000_BMI_UK20080294_khmelnytskyi_lysets_MIC05", "source_name": "000000_BMI_UK20080294_khmelnytskyi_lysets_MIC05.flac", "source_path": "audio/shared/source/T-pp2380F9c__T-pp2380F9c_000000_BMI_UK20080294_khmelnytskyi_lysets_MIC05.mp3", "target_label": "000000_mixture", "target_name": "000000_mixture.flac", "target_path": "audio/shared/target/T-pp2380F9c__T-pp2380F9c_000000_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "-0.0088", "value": -0.008784027453774601}, "f0_rmse": {"display": "0.811", "value": 0.8111686706542969}, "resemblyzer_similarity": {"display": "0.1461", "value": 0.1460573673248291}, "singmos_naturalness": {"display": "-0.0568", "value": -0.056835174560546875}}, "has_both_runs": true, "index": 12, "item_key": "data/processed/T-pp2380F9c/000002_BMI_UK20080294_khmelnytskyi_lysets_MIC04.flac::data/processed/T-pp2380F9c/000002_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000002_BMI_UK20080294_khmelnytskyi_lysets_MIC04.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9479", "error": null, "sort_value": 0.9478706991259123, "status": "ok", "value": 0.9478706991259123}, "f0_rmse": {"display": "12.919", "error": null, "sort_value": -12.919252395629883, "status": "ok", "value": 12.919252395629883}, "resemblyzer_similarity": {"display": "0.7965", "error": null, "sort_value": 0.7965021729469299, "status": "ok", "value": 0.7965021729469299}, "singmos_naturalness": {"display": "3.8443", "error": null, "sort_value": 3.8442800045013428, "status": "ok", "value": 3.8442800045013428}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000002_BMI_UK20080294_khmelnytskyi_lysets_MIC04.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9391", "error": null, "sort_value": 0.9390866716721377, "status": "ok", "value": 0.9390866716721377}, "f0_rmse": {"display": "13.730", "error": null, "sort_value": -13.73042106628418, "status": "ok", "value": 13.73042106628418}, "resemblyzer_similarity": {"display": "0.9426", "error": null, "sort_value": 0.942559540271759, "status": "ok", "value": 0.942559540271759}, "singmos_naturalness": {"display": "3.7874", "error": null, "sort_value": 3.787444829940796, "status": "ok", "value": 3.787444829940796}}}, "source_label": "000002_BMI_UK20080294_khmelnytskyi_lysets_MIC04", "source_name": "000002_BMI_UK20080294_khmelnytskyi_lysets_MIC04.flac", "source_path": "audio/shared/source/T-pp2380F9c__T-pp2380F9c_000002_BMI_UK20080294_khmelnytskyi_lysets_MIC04.mp3", "target_label": "000002_mixture", "target_name": "000002_mixture.flac", "target_path": "audio/shared/target/T-pp2380F9c__T-pp2380F9c_000002_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "0.0014", "value": 0.0013552636278373331}, "f0_rmse": {"display": "-0.267", "value": -0.26697540283203125}, "resemblyzer_similarity": {"display": "0.1195", "value": 0.11953157186508179}, "singmos_naturalness": {"display": "-0.2941", "value": -0.2941408157348633}}, "has_both_runs": true, "index": 13, "item_key": "data/processed/T-pp2380F9c/000004_BMI_UK20080294_khmelnytskyi_lysets_MIC02.flac::data/processed/T-pp2380F9c/000004_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000004_BMI_UK20080294_khmelnytskyi_lysets_MIC02.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9340", "error": null, "sort_value": 0.9340491889012682, "status": "ok", "value": 0.9340491889012682}, "f0_rmse": {"display": "14.914", "error": null, "sort_value": -14.91370677947998, "status": "ok", "value": 14.91370677947998}, "resemblyzer_similarity": {"display": "0.8300", "error": null, "sort_value": 0.8299937844276428, "status": "ok", "value": 0.8299937844276428}, "singmos_naturalness": {"display": "3.0667", "error": null, "sort_value": 3.066729784011841, "status": "ok", "value": 3.066729784011841}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000004_BMI_UK20080294_khmelnytskyi_lysets_MIC02.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9354", "error": null, "sort_value": 0.9354044525291055, "status": "ok", "value": 0.9354044525291055}, "f0_rmse": {"display": "14.647", "error": null, "sort_value": -14.64673137664795, "status": "ok", "value": 14.64673137664795}, "resemblyzer_similarity": {"display": "0.9495", "error": null, "sort_value": 0.9495253562927246, "status": "ok", "value": 0.9495253562927246}, "singmos_naturalness": {"display": "2.7726", "error": null, "sort_value": 2.7725889682769775, "status": "ok", "value": 2.7725889682769775}}}, "source_label": "000004_BMI_UK20080294_khmelnytskyi_lysets_MIC02", "source_name": "000004_BMI_UK20080294_khmelnytskyi_lysets_MIC02.flac", "source_path": "audio/shared/source/T-pp2380F9c__T-pp2380F9c_000004_BMI_UK20080294_khmelnytskyi_lysets_MIC02.mp3", "target_label": "000004_mixture", "target_name": "000004_mixture.flac", "target_path": "audio/shared/target/T-pp2380F9c__T-pp2380F9c_000004_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "-0.0080", "value": -0.007988503910661304}, "f0_rmse": {"display": "0.881", "value": 0.8809404373168945}, "resemblyzer_similarity": {"display": "0.1232", "value": 0.12315338850021362}, "singmos_naturalness": {"display": "-0.2684", "value": -0.2684047222137451}}, "has_both_runs": true, "index": 14, "item_key": "data/processed/T-pp2380F9c/000005_BMI_UK20080294_khmelnytskyi_lysets_MIC05.flac::data/processed/T-pp2380F9c/000005_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000005_BMI_UK20080294_khmelnytskyi_lysets_MIC05.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9300", "error": null, "sort_value": 0.9300057027486126, "status": "ok", "value": 0.9300057027486126}, "f0_rmse": {"display": "15.695", "error": null, "sort_value": -15.694825172424316, "status": "ok", "value": 15.694825172424316}, "resemblyzer_similarity": {"display": "0.7931", "error": null, "sort_value": 0.7930638194084167, "status": "ok", "value": 0.7930638194084167}, "singmos_naturalness": {"display": "4.2438", "error": null, "sort_value": 4.2437896728515625, "status": "ok", "value": 4.2437896728515625}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000005_BMI_UK20080294_khmelnytskyi_lysets_MIC05.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9220", "error": null, "sort_value": 0.9220171988379513, "status": "ok", "value": 0.9220171988379513}, "f0_rmse": {"display": "16.576", "error": null, "sort_value": -16.57576560974121, "status": "ok", "value": 16.57576560974121}, "resemblyzer_similarity": {"display": "0.9162", "error": null, "sort_value": 0.9162172079086304, "status": "ok", "value": 0.9162172079086304}, "singmos_naturalness": {"display": "3.9754", "error": null, "sort_value": 3.9753849506378174, "status": "ok", "value": 3.9753849506378174}}}, "source_label": "000005_BMI_UK20080294_khmelnytskyi_lysets_MIC05", "source_name": "000005_BMI_UK20080294_khmelnytskyi_lysets_MIC05.flac", "source_path": "audio/shared/source/T-pp2380F9c__T-pp2380F9c_000005_BMI_UK20080294_khmelnytskyi_lysets_MIC05.mp3", "target_label": "000005_mixture", "target_name": "000005_mixture.flac", "target_path": "audio/shared/target/T-pp2380F9c__T-pp2380F9c_000005_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "-0.0001", "value": -7.390322444567055e-05}, "f0_rmse": {"display": "-0.249", "value": -0.24901390075683594}, "resemblyzer_similarity": {"display": "0.1319", "value": 0.13186413049697876}, "singmos_naturalness": {"display": "-0.2915", "value": -0.2915205955505371}}, "has_both_runs": true, "index": 15, "item_key": "data/processed/TBe6pJaN6Vs/000001_BMI_UK18060012_chernihiv_vovchok_MIC03.flac::data/processed/TBe6pJaN6Vs/000001_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000001_BMI_UK18060012_chernihiv_vovchok_MIC03.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.8375", "error": null, "sort_value": 0.8375090745038009, "status": "ok", "value": 0.8375090745038009}, "f0_rmse": {"display": "18.446", "error": null, "sort_value": -18.44640350341797, "status": "ok", "value": 18.44640350341797}, "resemblyzer_similarity": {"display": "0.7592", "error": null, "sort_value": 0.7591591477394104, "status": "ok", "value": 0.7591591477394104}, "singmos_naturalness": {"display": "2.8537", "error": null, "sort_value": 2.8537330627441406, "status": "ok", "value": 2.8537330627441406}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000001_BMI_UK18060012_chernihiv_vovchok_MIC03.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.8374", "error": null, "sort_value": 0.8374351712793552, "status": "ok", "value": 0.8374351712793552}, "f0_rmse": {"display": "18.197", "error": null, "sort_value": -18.197389602661133, "status": "ok", "value": 18.197389602661133}, "resemblyzer_similarity": {"display": "0.8910", "error": null, "sort_value": 0.8910232782363892, "status": "ok", "value": 0.8910232782363892}, "singmos_naturalness": {"display": "2.5622", "error": null, "sort_value": 2.5622124671936035, "status": "ok", "value": 2.5622124671936035}}}, "source_label": "000001_BMI_UK18060012_chernihiv_vovchok_MIC03", "source_name": "000001_BMI_UK18060012_chernihiv_vovchok_MIC03.flac", "source_path": "audio/shared/source/TBe6pJaN6Vs__TBe6pJaN6Vs_000001_BMI_UK18060012_chernihiv_vovchok_MIC03.mp3", "target_label": "000001_mixture", "target_name": "000001_mixture.flac", "target_path": "audio/shared/target/TBe6pJaN6Vs__TBe6pJaN6Vs_000001_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "0.0114", "value": 0.011358353190705772}, "f0_rmse": {"display": "-1.310", "value": -1.3096723556518555}, "resemblyzer_similarity": {"display": "0.0553", "value": 0.05528515577316284}, "singmos_naturalness": {"display": "0.0273", "value": 0.027337074279785156}}, "has_both_runs": true, "index": 16, "item_key": "data/processed/aje_N4N19Ws/000001_BMI_UK20080059_khmelnytskyi_dyatylivka_MIC04.flac::data/processed/aje_N4N19Ws/000001_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000001_BMI_UK20080059_khmelnytskyi_dyatylivka_MIC04.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9539", "error": null, "sort_value": 0.9539236810975523, "status": "ok", "value": 0.9539236810975523}, "f0_rmse": {"display": "11.084", "error": null, "sort_value": -11.084436416625977, "status": "ok", "value": 11.084436416625977}, "resemblyzer_similarity": {"display": "0.7923", "error": null, "sort_value": 0.7922574877738953, "status": "ok", "value": 0.7922574877738953}, "singmos_naturalness": {"display": "4.0526", "error": null, "sort_value": 4.052605628967285, "status": "ok", "value": 4.052605628967285}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000001_BMI_UK20080059_khmelnytskyi_dyatylivka_MIC04.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9653", "error": null, "sort_value": 0.9652820342882581, "status": "ok", "value": 0.9652820342882581}, "f0_rmse": {"display": "9.775", "error": null, "sort_value": -9.774764060974121, "status": "ok", "value": 9.774764060974121}, "resemblyzer_similarity": {"display": "0.8475", "error": null, "sort_value": 0.8475426435470581, "status": "ok", "value": 0.8475426435470581}, "singmos_naturalness": {"display": "4.0799", "error": null, "sort_value": 4.07994270324707, "status": "ok", "value": 4.07994270324707}}}, "source_label": "000001_BMI_UK20080059_khmelnytskyi_dyatylivka_MIC04", "source_name": "000001_BMI_UK20080059_khmelnytskyi_dyatylivka_MIC04.flac", "source_path": "audio/shared/source/aje_N4N19Ws__aje_N4N19Ws_000001_BMI_UK20080059_khmelnytskyi_dyatylivka_MIC04.mp3", "target_label": "000001_mixture", "target_name": "000001_mixture.flac", "target_path": "audio/shared/target/aje_N4N19Ws__aje_N4N19Ws_000001_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "-0.0028", "value": -0.0027503953240523016}, "f0_rmse": {"display": "-0.126", "value": -0.12633991241455078}, "resemblyzer_similarity": {"display": "0.0763", "value": 0.0763094425201416}, "singmos_naturalness": {"display": "0.0693", "value": 0.06931304931640625}}, "has_both_runs": true, "index": 17, "item_key": "data/processed/aje_N4N19Ws/000002_BMI_UK20080059_khmelnytskyi_dyatylivka_MIC02.flac::data/processed/aje_N4N19Ws/000002_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000002_BMI_UK20080059_khmelnytskyi_dyatylivka_MIC02.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9924", "error": null, "sort_value": 0.9923833515926805, "status": "ok", "value": 0.9923833515926805}, "f0_rmse": {"display": "4.938", "error": null, "sort_value": -4.937684059143066, "status": "ok", "value": 4.937684059143066}, "resemblyzer_similarity": {"display": "0.8338", "error": null, "sort_value": 0.8337544202804565, "status": "ok", "value": 0.8337544202804565}, "singmos_naturalness": {"display": "3.2697", "error": null, "sort_value": 3.2697134017944336, "status": "ok", "value": 3.2697134017944336}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000002_BMI_UK20080059_khmelnytskyi_dyatylivka_MIC02.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9896", "error": null, "sort_value": 0.9896329562686282, "status": "ok", "value": 0.9896329562686282}, "f0_rmse": {"display": "4.811", "error": null, "sort_value": -4.811344146728516, "status": "ok", "value": 4.811344146728516}, "resemblyzer_similarity": {"display": "0.9101", "error": null, "sort_value": 0.9100638628005981, "status": "ok", "value": 0.9100638628005981}, "singmos_naturalness": {"display": "3.3390", "error": null, "sort_value": 3.33902645111084, "status": "ok", "value": 3.33902645111084}}}, "source_label": "000002_BMI_UK20080059_khmelnytskyi_dyatylivka_MIC02", "source_name": "000002_BMI_UK20080059_khmelnytskyi_dyatylivka_MIC02.flac", "source_path": "audio/shared/source/aje_N4N19Ws__aje_N4N19Ws_000002_BMI_UK20080059_khmelnytskyi_dyatylivka_MIC02.mp3", "target_label": "000002_mixture", "target_name": "000002_mixture.flac", "target_path": "audio/shared/target/aje_N4N19Ws__aje_N4N19Ws_000002_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "0.0284", "value": 0.028384237553270353}, "f0_rmse": {"display": "0.012", "value": 0.01218414306640625}, "resemblyzer_similarity": {"display": "0.1274", "value": 0.12743204832077026}, "singmos_naturalness": {"display": "0.1618", "value": 0.16175603866577148}}, "has_both_runs": true, "index": 18, "item_key": "data/processed/bw6zx2HCXpU/000001_BMI_UK20080115_lviv_hlynytsi_MIC01.flac::data/processed/bw6zx2HCXpU/000001_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000001_BMI_UK20080115_lviv_hlynytsi_MIC01.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9314", "error": null, "sort_value": 0.931420807841272, "status": "ok", "value": 0.931420807841272}, "f0_rmse": {"display": "61.155", "error": null, "sort_value": -61.155033111572266, "status": "ok", "value": 61.155033111572266}, "resemblyzer_similarity": {"display": "0.7836", "error": null, "sort_value": 0.783565104007721, "status": "ok", "value": 0.783565104007721}, "singmos_naturalness": {"display": "3.0692", "error": null, "sort_value": 3.0692458152770996, "status": "ok", "value": 3.0692458152770996}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000001_BMI_UK20080115_lviv_hlynytsi_MIC01.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9598", "error": null, "sort_value": 0.9598050453945424, "status": "ok", "value": 0.9598050453945424}, "f0_rmse": {"display": "61.167", "error": null, "sort_value": -61.16721725463867, "status": "ok", "value": 61.16721725463867}, "resemblyzer_similarity": {"display": "0.9110", "error": null, "sort_value": 0.9109971523284912, "status": "ok", "value": 0.9109971523284912}, "singmos_naturalness": {"display": "3.2310", "error": null, "sort_value": 3.231001853942871, "status": "ok", "value": 3.231001853942871}}}, "source_label": "000001_BMI_UK20080115_lviv_hlynytsi_MIC01", "source_name": "000001_BMI_UK20080115_lviv_hlynytsi_MIC01.flac", "source_path": "audio/shared/source/bw6zx2HCXpU__bw6zx2HCXpU_000001_BMI_UK20080115_lviv_hlynytsi_MIC01.mp3", "target_label": "000001_mixture", "target_name": "000001_mixture.flac", "target_path": "audio/shared/target/bw6zx2HCXpU__bw6zx2HCXpU_000001_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "-0.0089", "value": -0.008865377360322224}, "f0_rmse": {"display": "2.551", "value": 2.550537109375}, "resemblyzer_similarity": {"display": "0.0887", "value": 0.0887262225151062}, "singmos_naturalness": {"display": "-0.1168", "value": -0.11679363250732422}}, "has_both_runs": true, "index": 19, "item_key": "data/processed/jV7XDLvWg3c/000000_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC04.flac::data/processed/jV7XDLvWg3c/000000_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000000_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC04.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9648", "error": null, "sort_value": 0.9647623860502805, "status": "ok", "value": 0.9647623860502805}, "f0_rmse": {"display": "24.612", "error": null, "sort_value": -24.611886978149414, "status": "ok", "value": 24.611886978149414}, "resemblyzer_similarity": {"display": "0.7909", "error": null, "sort_value": 0.7908630967140198, "status": "ok", "value": 0.7908630967140198}, "singmos_naturalness": {"display": "3.1392", "error": null, "sort_value": 3.1392345428466797, "status": "ok", "value": 3.1392345428466797}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000000_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC04.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9559", "error": null, "sort_value": 0.9558970086899583, "status": "ok", "value": 0.9558970086899583}, "f0_rmse": {"display": "27.162", "error": null, "sort_value": -27.162424087524414, "status": "ok", "value": 27.162424087524414}, "resemblyzer_similarity": {"display": "0.8796", "error": null, "sort_value": 0.879589319229126, "status": "ok", "value": 0.879589319229126}, "singmos_naturalness": {"display": "3.0224", "error": null, "sort_value": 3.0224409103393555, "status": "ok", "value": 3.0224409103393555}}}, "source_label": "000000_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC04", "source_name": "000000_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC04.flac", "source_path": "audio/shared/source/jV7XDLvWg3c__jV7XDLvWg3c_000000_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC04.mp3", "target_label": "000000_mixture", "target_name": "000000_mixture.flac", "target_path": "audio/shared/target/jV7XDLvWg3c__jV7XDLvWg3c_000000_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "-0.0074", "value": -0.007379054800316975}, "f0_rmse": {"display": "1.872", "value": 1.8718013763427734}, "resemblyzer_similarity": {"display": "0.0520", "value": 0.05197387933731079}, "singmos_naturalness": {"display": "-0.3373", "value": -0.3373270034790039}}, "has_both_runs": true, "index": 20, "item_key": "data/processed/jV7XDLvWg3c/000001_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC02.flac::data/processed/jV7XDLvWg3c/000001_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000001_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC02.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9670", "error": null, "sort_value": 0.9669792882596088, "status": "ok", "value": 0.9669792882596088}, "f0_rmse": {"display": "23.061", "error": null, "sort_value": -23.061250686645508, "status": "ok", "value": 23.061250686645508}, "resemblyzer_similarity": {"display": "0.7673", "error": null, "sort_value": 0.7673149108886719, "status": "ok", "value": 0.7673149108886719}, "singmos_naturalness": {"display": "3.6630", "error": null, "sort_value": 3.6629881858825684, "status": "ok", "value": 3.6629881858825684}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000001_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC02.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9596", "error": null, "sort_value": 0.9596002334592918, "status": "ok", "value": 0.9596002334592918}, "f0_rmse": {"display": "24.933", "error": null, "sort_value": -24.93305206298828, "status": "ok", "value": 24.93305206298828}, "resemblyzer_similarity": {"display": "0.8193", "error": null, "sort_value": 0.8192887902259827, "status": "ok", "value": 0.8192887902259827}, "singmos_naturalness": {"display": "3.3257", "error": null, "sort_value": 3.3256611824035645, "status": "ok", "value": 3.3256611824035645}}}, "source_label": "000001_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC02", "source_name": "000001_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC02.flac", "source_path": "audio/shared/source/jV7XDLvWg3c__jV7XDLvWg3c_000001_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC02.mp3", "target_label": "000001_mixture", "target_name": "000001_mixture.flac", "target_path": "audio/shared/target/jV7XDLvWg3c__jV7XDLvWg3c_000001_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "-0.0063", "value": -0.006278341654952224}, "f0_rmse": {"display": "0.492", "value": 0.4920005798339844}, "resemblyzer_similarity": {"display": "0.0993", "value": 0.09933584928512573}, "singmos_naturalness": {"display": "-0.3663", "value": -0.3663358688354492}}, "has_both_runs": true, "index": 21, "item_key": "data/processed/jV7XDLvWg3c/000002_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC02.flac::data/processed/jV7XDLvWg3c/000002_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000002_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC02.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9816", "error": null, "sort_value": 0.9816111493500054, "status": "ok", "value": 0.9816111493500054}, "f0_rmse": {"display": "54.310", "error": null, "sort_value": -54.31000900268555, "status": "ok", "value": 54.31000900268555}, "resemblyzer_similarity": {"display": "0.7642", "error": null, "sort_value": 0.7641595005989075, "status": "ok", "value": 0.7641595005989075}, "singmos_naturalness": {"display": "4.7143", "error": null, "sort_value": 4.7143402099609375, "status": "ok", "value": 4.7143402099609375}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000002_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC02.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9753", "error": null, "sort_value": 0.9753328076950531, "status": "ok", "value": 0.9753328076950531}, "f0_rmse": {"display": "54.802", "error": null, "sort_value": -54.80200958251953, "status": "ok", "value": 54.80200958251953}, "resemblyzer_similarity": {"display": "0.8635", "error": null, "sort_value": 0.8634953498840332, "status": "ok", "value": 0.8634953498840332}, "singmos_naturalness": {"display": "4.3480", "error": null, "sort_value": 4.348004341125488, "status": "ok", "value": 4.348004341125488}}}, "source_label": "000002_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC02", "source_name": "000002_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC02.flac", "source_path": "audio/shared/source/jV7XDLvWg3c__jV7XDLvWg3c_000002_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC02.mp3", "target_label": "000002_mixture", "target_name": "000002_mixture.flac", "target_path": "audio/shared/target/jV7XDLvWg3c__jV7XDLvWg3c_000002_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "0.0112", "value": 0.011187149121174467}, "f0_rmse": {"display": "-4.460", "value": -4.460366249084473}, "resemblyzer_similarity": {"display": "0.0404", "value": 0.040401995182037354}, "singmos_naturalness": {"display": "0.3710", "value": 0.3709676265716553}}, "has_both_runs": true, "index": 22, "item_key": "data/processed/jV7XDLvWg3c/000002_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC03.flac::data/processed/jV7XDLvWg3c/000002_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000002_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC03.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9782", "error": null, "sort_value": 0.9782378924530428, "status": "ok", "value": 0.9782378924530428}, "f0_rmse": {"display": "16.004", "error": null, "sort_value": -16.00417709350586, "status": "ok", "value": 16.00417709350586}, "resemblyzer_similarity": {"display": "0.8121", "error": null, "sort_value": 0.8120920658111572, "status": "ok", "value": 0.8120920658111572}, "singmos_naturalness": {"display": "3.5480", "error": null, "sort_value": 3.5479636192321777, "status": "ok", "value": 3.5479636192321777}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000002_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC03.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9894", "error": null, "sort_value": 0.9894250415742173, "status": "ok", "value": 0.9894250415742173}, "f0_rmse": {"display": "11.544", "error": null, "sort_value": -11.543810844421387, "status": "ok", "value": 11.543810844421387}, "resemblyzer_similarity": {"display": "0.8525", "error": null, "sort_value": 0.8524940609931946, "status": "ok", "value": 0.8524940609931946}, "singmos_naturalness": {"display": "3.9189", "error": null, "sort_value": 3.918931245803833, "status": "ok", "value": 3.918931245803833}}}, "source_label": "000002_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC03", "source_name": "000002_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC03.flac", "source_path": "audio/shared/source/jV7XDLvWg3c__jV7XDLvWg3c_000002_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC03.mp3", "target_label": "000002_mixture", "target_name": "000002_mixture.flac", "target_path": "audio/shared/target/jV7XDLvWg3c__jV7XDLvWg3c_000002_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "-0.0252", "value": -0.025156772807115813}, "f0_rmse": {"display": "4.203", "value": 4.203065872192383}, "resemblyzer_similarity": {"display": "0.0717", "value": 0.07167786359786987}, "singmos_naturalness": {"display": "0.1124", "value": 0.1124272346496582}}, "has_both_runs": true, "index": 23, "item_key": "data/processed/jWD6oJ8QwAc/000000_BMI_UK17100199_kherson_bekhtery_MIC01.flac::data/processed/jWD6oJ8QwAc/000000_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000000_BMI_UK17100199_kherson_bekhtery_MIC01.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9669", "error": null, "sort_value": 0.9669258444362079, "status": "ok", "value": 0.9669258444362079}, "f0_rmse": {"display": "12.724", "error": null, "sort_value": -12.723819732666016, "status": "ok", "value": 12.723819732666016}, "resemblyzer_similarity": {"display": "0.8654", "error": null, "sort_value": 0.8653577566146851, "status": "ok", "value": 0.8653577566146851}, "singmos_naturalness": {"display": "4.0613", "error": null, "sort_value": 4.061348915100098, "status": "ok", "value": 4.061348915100098}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000000_BMI_UK17100199_kherson_bekhtery_MIC01.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9418", "error": null, "sort_value": 0.9417690716290921, "status": "ok", "value": 0.9417690716290921}, "f0_rmse": {"display": "16.927", "error": null, "sort_value": -16.9268856048584, "status": "ok", "value": 16.9268856048584}, "resemblyzer_similarity": {"display": "0.9370", "error": null, "sort_value": 0.9370356202125549, "status": "ok", "value": 0.9370356202125549}, "singmos_naturalness": {"display": "4.1738", "error": null, "sort_value": 4.173776149749756, "status": "ok", "value": 4.173776149749756}}}, "source_label": "000000_BMI_UK17100199_kherson_bekhtery_MIC01", "source_name": "000000_BMI_UK17100199_kherson_bekhtery_MIC01.flac", "source_path": "audio/shared/source/jWD6oJ8QwAc__jWD6oJ8QwAc_000000_BMI_UK17100199_kherson_bekhtery_MIC01.mp3", "target_label": "000000_mixture", "target_name": "000000_mixture.flac", "target_path": "audio/shared/target/jWD6oJ8QwAc__jWD6oJ8QwAc_000000_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "-0.0031", "value": -0.0031132967240640186}, "f0_rmse": {"display": "0.309", "value": 0.3092308044433594}, "resemblyzer_similarity": {"display": "0.1177", "value": 0.11768895387649536}, "singmos_naturalness": {"display": "-0.0617", "value": -0.06171560287475586}}, "has_both_runs": true, "index": 24, "item_key": "data/processed/klcrcVLxrSE/000001_BMI_UK18060574_rivne_krychylsk_MIC03_20.flac::data/processed/klcrcVLxrSE/000001_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000001_BMI_UK18060574_rivne_krychylsk_MIC03_20.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9380", "error": null, "sort_value": 0.9380461505924532, "status": "ok", "value": 0.9380461505924532}, "f0_rmse": {"display": "17.098", "error": null, "sort_value": -17.098440170288086, "status": "ok", "value": 17.098440170288086}, "resemblyzer_similarity": {"display": "0.7924", "error": null, "sort_value": 0.7924003601074219, "status": "ok", "value": 0.7924003601074219}, "singmos_naturalness": {"display": "3.7114", "error": null, "sort_value": 3.7113938331604004, "status": "ok", "value": 3.7113938331604004}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000001_BMI_UK18060574_rivne_krychylsk_MIC03_20.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9349", "error": null, "sort_value": 0.9349328538683892, "status": "ok", "value": 0.9349328538683892}, "f0_rmse": {"display": "17.408", "error": null, "sort_value": -17.407670974731445, "status": "ok", "value": 17.407670974731445}, "resemblyzer_similarity": {"display": "0.9101", "error": null, "sort_value": 0.9100893139839172, "status": "ok", "value": 0.9100893139839172}, "singmos_naturalness": {"display": "3.6497", "error": null, "sort_value": 3.6496782302856445, "status": "ok", "value": 3.6496782302856445}}}, "source_label": "000001_BMI_UK18060574_rivne_krychylsk_MIC03_20", "source_name": "000001_BMI_UK18060574_rivne_krychylsk_MIC03_20.flac", "source_path": "audio/shared/source/klcrcVLxrSE__klcrcVLxrSE_000001_BMI_UK18060574_rivne_krychylsk_MIC03_20.mp3", "target_label": "000001_mixture", "target_name": "000001_mixture.flac", "target_path": "audio/shared/target/klcrcVLxrSE__klcrcVLxrSE_000001_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "-0.0066", "value": -0.0066380562736036985}, "f0_rmse": {"display": "0.766", "value": 0.7657089233398438}, "resemblyzer_similarity": {"display": "0.0328", "value": 0.032802700996398926}, "singmos_naturalness": {"display": "0.0292", "value": 0.029230117797851562}}, "has_both_runs": true, "index": 25, "item_key": "data/processed/n-q4IEo_LCg/000002_BMI_UK17100193_kherson_bekhtery_MIC01.flac::data/processed/n-q4IEo_LCg/000002_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000002_BMI_UK17100193_kherson_bekhtery_MIC01.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9674", "error": null, "sort_value": 0.9674260669152148, "status": "ok", "value": 0.9674260669152148}, "f0_rmse": {"display": "16.371", "error": null, "sort_value": -16.370967864990234, "status": "ok", "value": 16.370967864990234}, "resemblyzer_similarity": {"display": "0.8302", "error": null, "sort_value": 0.8301833271980286, "status": "ok", "value": 0.8301833271980286}, "singmos_naturalness": {"display": "3.9660", "error": null, "sort_value": 3.965954303741455, "status": "ok", "value": 3.965954303741455}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000002_BMI_UK17100193_kherson_bekhtery_MIC01.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9608", "error": null, "sort_value": 0.9607880106416111, "status": "ok", "value": 0.9607880106416111}, "f0_rmse": {"display": "17.137", "error": null, "sort_value": -17.136676788330078, "status": "ok", "value": 17.136676788330078}, "resemblyzer_similarity": {"display": "0.8630", "error": null, "sort_value": 0.8629860281944275, "status": "ok", "value": 0.8629860281944275}, "singmos_naturalness": {"display": "3.9952", "error": null, "sort_value": 3.9951844215393066, "status": "ok", "value": 3.9951844215393066}}}, "source_label": "000002_BMI_UK17100193_kherson_bekhtery_MIC01", "source_name": "000002_BMI_UK17100193_kherson_bekhtery_MIC01.flac", "source_path": "audio/shared/source/n-q4IEo_LCg__n-q4IEo_LCg_000002_BMI_UK17100193_kherson_bekhtery_MIC01.mp3", "target_label": "000002_mixture", "target_name": "000002_mixture.flac", "target_path": "audio/shared/target/n-q4IEo_LCg__n-q4IEo_LCg_000002_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "0.0075", "value": 0.0075465486114076885}, "f0_rmse": {"display": "-1.343", "value": -1.3425893783569336}, "resemblyzer_similarity": {"display": "0.1430", "value": 0.14302211999893188}, "singmos_naturalness": {"display": "-0.2964", "value": -0.2964444160461426}}, "has_both_runs": true, "index": 26, "item_key": "data/processed/nmUmlcfjI90/000001_BMI_UK18090305_sumy_burin_MIC03.flac::data/processed/nmUmlcfjI90/000001_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000001_BMI_UK18090305_sumy_burin_MIC03.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9594", "error": null, "sort_value": 0.9593546726631141, "status": "ok", "value": 0.9593546726631141}, "f0_rmse": {"display": "13.340", "error": null, "sort_value": -13.340215682983398, "status": "ok", "value": 13.340215682983398}, "resemblyzer_similarity": {"display": "0.7572", "error": null, "sort_value": 0.7571583986282349, "status": "ok", "value": 0.7571583986282349}, "singmos_naturalness": {"display": "3.4960", "error": null, "sort_value": 3.4960098266601562, "status": "ok", "value": 3.4960098266601562}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000001_BMI_UK18090305_sumy_burin_MIC03.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9669", "error": null, "sort_value": 0.9669012212745218, "status": "ok", "value": 0.9669012212745218}, "f0_rmse": {"display": "11.998", "error": null, "sort_value": -11.997626304626465, "status": "ok", "value": 11.997626304626465}, "resemblyzer_similarity": {"display": "0.9002", "error": null, "sort_value": 0.9001805186271667, "status": "ok", "value": 0.9001805186271667}, "singmos_naturalness": {"display": "3.1996", "error": null, "sort_value": 3.1995654106140137, "status": "ok", "value": 3.1995654106140137}}}, "source_label": "000001_BMI_UK18090305_sumy_burin_MIC03", "source_name": "000001_BMI_UK18090305_sumy_burin_MIC03.flac", "source_path": "audio/shared/source/nmUmlcfjI90__nmUmlcfjI90_000001_BMI_UK18090305_sumy_burin_MIC03.mp3", "target_label": "000001_mixture", "target_name": "000001_mixture.flac", "target_path": "audio/shared/target/nmUmlcfjI90__nmUmlcfjI90_000001_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "0.0002", "value": 0.00017694332015527614}, "f0_rmse": {"display": "-0.127", "value": -0.126617431640625}, "resemblyzer_similarity": {"display": "0.0991", "value": 0.09911662340164185}, "singmos_naturalness": {"display": "-0.4470", "value": -0.4470367431640625}}, "has_both_runs": true, "index": 27, "item_key": "data/processed/nmUmlcfjI90/000001_BMI_UK18090305_sumy_burin_MIC04.flac::data/processed/nmUmlcfjI90/000001_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000001_BMI_UK18090305_sumy_burin_MIC04.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9716", "error": null, "sort_value": 0.9715532984125727, "status": "ok", "value": 0.9715532984125727}, "f0_rmse": {"display": "11.778", "error": null, "sort_value": -11.77780532836914, "status": "ok", "value": 11.77780532836914}, "resemblyzer_similarity": {"display": "0.7633", "error": null, "sort_value": 0.7632938027381897, "status": "ok", "value": 0.7632938027381897}, "singmos_naturalness": {"display": "4.5130", "error": null, "sort_value": 4.512992858886719, "status": "ok", "value": 4.512992858886719}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000001_BMI_UK18090305_sumy_burin_MIC04.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9717", "error": null, "sort_value": 0.9717302417327279, "status": "ok", "value": 0.9717302417327279}, "f0_rmse": {"display": "11.651", "error": null, "sort_value": -11.651187896728516, "status": "ok", "value": 11.651187896728516}, "resemblyzer_similarity": {"display": "0.8624", "error": null, "sort_value": 0.8624104261398315, "status": "ok", "value": 0.8624104261398315}, "singmos_naturalness": {"display": "4.0660", "error": null, "sort_value": 4.065956115722656, "status": "ok", "value": 4.065956115722656}}}, "source_label": "000001_BMI_UK18090305_sumy_burin_MIC04", "source_name": "000001_BMI_UK18090305_sumy_burin_MIC04.flac", "source_path": "audio/shared/source/nmUmlcfjI90__nmUmlcfjI90_000001_BMI_UK18090305_sumy_burin_MIC04.mp3", "target_label": "000001_mixture", "target_name": "000001_mixture.flac", "target_path": "audio/shared/target/nmUmlcfjI90__nmUmlcfjI90_000001_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "-0.0028", "value": -0.00284471797409358}, "f0_rmse": {"display": "0.146", "value": 0.14647674560546875}, "resemblyzer_similarity": {"display": "0.0921", "value": 0.09206968545913696}, "singmos_naturalness": {"display": "N/A", "value": null}}, "has_both_runs": true, "index": 28, "item_key": "data/processed/nmUmlcfjI90/000004_BMI_UK18090305_sumy_burin_MIC04.flac::data/processed/nmUmlcfjI90/000004_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000004_BMI_UK18090305_sumy_burin_MIC04.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9323", "error": null, "sort_value": 0.9322786131510368, "status": "ok", "value": 0.9322786131510368}, "f0_rmse": {"display": "14.523", "error": null, "sort_value": -14.523218154907227, "status": "ok", "value": 14.523218154907227}, "resemblyzer_similarity": {"display": "0.7614", "error": null, "sort_value": 0.7614132761955261, "status": "ok", "value": 0.7614132761955261}, "singmos_naturalness": {"display": "N/A", "error": "4, 2", "sort_value": null, "status": "metric_failed", "value": null}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000004_BMI_UK18090305_sumy_burin_MIC04.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9294", "error": null, "sort_value": 0.9294338951769432, "status": "ok", "value": 0.9294338951769432}, "f0_rmse": {"display": "14.670", "error": null, "sort_value": -14.669694900512695, "status": "ok", "value": 14.669694900512695}, "resemblyzer_similarity": {"display": "0.8535", "error": null, "sort_value": 0.8534829616546631, "status": "ok", "value": 0.8534829616546631}, "singmos_naturalness": {"display": "N/A", "error": "4, 2", "sort_value": null, "status": "metric_failed", "value": null}}}, "source_label": "000004_BMI_UK18090305_sumy_burin_MIC04", "source_name": "000004_BMI_UK18090305_sumy_burin_MIC04.flac", "source_path": "audio/shared/source/nmUmlcfjI90__nmUmlcfjI90_000004_BMI_UK18090305_sumy_burin_MIC04.mp3", "target_label": "000004_mixture", "target_name": "000004_mixture.flac", "target_path": "audio/shared/target/nmUmlcfjI90__nmUmlcfjI90_000004_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "0.0065", "value": 0.00645531569398794}, "f0_rmse": {"display": "-1.157", "value": -1.1574993133544922}, "resemblyzer_similarity": {"display": "0.1473", "value": 0.14732635021209717}, "singmos_naturalness": {"display": "-0.2905", "value": -0.29045629501342773}}, "has_both_runs": true, "index": 29, "item_key": "data/processed/nmUmlcfjI90/000005_BMI_UK18090305_sumy_burin_MIC01.flac::data/processed/nmUmlcfjI90/000005_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000005_BMI_UK18090305_sumy_burin_MIC01.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9432", "error": null, "sort_value": 0.9432350691873891, "status": "ok", "value": 0.9432350691873891}, "f0_rmse": {"display": "15.459", "error": null, "sort_value": -15.45889663696289, "status": "ok", "value": 15.45889663696289}, "resemblyzer_similarity": {"display": "0.7502", "error": null, "sort_value": 0.7501887679100037, "status": "ok", "value": 0.7501887679100037}, "singmos_naturalness": {"display": "4.3487", "error": null, "sort_value": 4.348674297332764, "status": "ok", "value": 4.348674297332764}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000005_BMI_UK18090305_sumy_burin_MIC01.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9497", "error": null, "sort_value": 0.949690384881377, "status": "ok", "value": 0.949690384881377}, "f0_rmse": {"display": "14.301", "error": null, "sort_value": -14.301397323608398, "status": "ok", "value": 14.301397323608398}, "resemblyzer_similarity": {"display": "0.8975", "error": null, "sort_value": 0.8975151181221008, "status": "ok", "value": 0.8975151181221008}, "singmos_naturalness": {"display": "4.0582", "error": null, "sort_value": 4.058218002319336, "status": "ok", "value": 4.058218002319336}}}, "source_label": "000005_BMI_UK18090305_sumy_burin_MIC01", "source_name": "000005_BMI_UK18090305_sumy_burin_MIC01.flac", "source_path": "audio/shared/source/nmUmlcfjI90__nmUmlcfjI90_000005_BMI_UK18090305_sumy_burin_MIC01.mp3", "target_label": "000005_mixture", "target_name": "000005_mixture.flac", "target_path": "audio/shared/target/nmUmlcfjI90__nmUmlcfjI90_000005_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "0.0116", "value": 0.011582219688867301}, "f0_rmse": {"display": "-1.706", "value": -1.7059812545776367}, "resemblyzer_similarity": {"display": "0.0945", "value": 0.0945010781288147}, "singmos_naturalness": {"display": "-0.0610", "value": -0.06096243858337402}}, "has_both_runs": true, "index": 30, "item_key": "data/processed/nmUmlcfjI90/000006_BMI_UK18090305_sumy_burin_MIC01.flac::data/processed/nmUmlcfjI90/000006_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000006_BMI_UK18090305_sumy_burin_MIC01.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9367", "error": null, "sort_value": 0.9366974718319119, "status": "ok", "value": 0.9366974718319119}, "f0_rmse": {"display": "16.060", "error": null, "sort_value": -16.06047821044922, "status": "ok", "value": 16.06047821044922}, "resemblyzer_similarity": {"display": "0.7812", "error": null, "sort_value": 0.7811935544013977, "status": "ok", "value": 0.7811935544013977}, "singmos_naturalness": {"display": "3.5559", "error": null, "sort_value": 3.555915594100952, "status": "ok", "value": 3.555915594100952}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000006_BMI_UK18090305_sumy_burin_MIC01.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9483", "error": null, "sort_value": 0.9482796915207792, "status": "ok", "value": 0.9482796915207792}, "f0_rmse": {"display": "14.354", "error": null, "sort_value": -14.354496955871582, "status": "ok", "value": 14.354496955871582}, "resemblyzer_similarity": {"display": "0.8757", "error": null, "sort_value": 0.8756946325302124, "status": "ok", "value": 0.8756946325302124}, "singmos_naturalness": {"display": "3.4950", "error": null, "sort_value": 3.494953155517578, "status": "ok", "value": 3.494953155517578}}}, "source_label": "000006_BMI_UK18090305_sumy_burin_MIC01", "source_name": "000006_BMI_UK18090305_sumy_burin_MIC01.flac", "source_path": "audio/shared/source/nmUmlcfjI90__nmUmlcfjI90_000006_BMI_UK18090305_sumy_burin_MIC01.mp3", "target_label": "000006_mixture", "target_name": "000006_mixture.flac", "target_path": "audio/shared/target/nmUmlcfjI90__nmUmlcfjI90_000006_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "0.0017", "value": 0.001700911418222928}, "f0_rmse": {"display": "-0.418", "value": -0.41825389862060547}, "resemblyzer_similarity": {"display": "0.1572", "value": 0.15716087818145752}, "singmos_naturalness": {"display": "-0.7287", "value": -0.7286672592163086}}, "has_both_runs": true, "index": 31, "item_key": "data/processed/nmUmlcfjI90/000007_BMI_UK18090305_sumy_burin_MIC04.flac::data/processed/nmUmlcfjI90/000007_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000007_BMI_UK18090305_sumy_burin_MIC04.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9748", "error": null, "sort_value": 0.9747621320364178, "status": "ok", "value": 0.9747621320364178}, "f0_rmse": {"display": "13.220", "error": null, "sort_value": -13.220277786254883, "status": "ok", "value": 13.220277786254883}, "resemblyzer_similarity": {"display": "0.7163", "error": null, "sort_value": 0.7163287401199341, "status": "ok", "value": 0.7163287401199341}, "singmos_naturalness": {"display": "3.7279", "error": null, "sort_value": 3.7279067039489746, "status": "ok", "value": 3.7279067039489746}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000007_BMI_UK18090305_sumy_burin_MIC04.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9765", "error": null, "sort_value": 0.9764630434546407, "status": "ok", "value": 0.9764630434546407}, "f0_rmse": {"display": "12.802", "error": null, "sort_value": -12.802023887634277, "status": "ok", "value": 12.802023887634277}, "resemblyzer_similarity": {"display": "0.8735", "error": null, "sort_value": 0.8734896183013916, "status": "ok", "value": 0.8734896183013916}, "singmos_naturalness": {"display": "2.9992", "error": null, "sort_value": 2.999239444732666, "status": "ok", "value": 2.999239444732666}}}, "source_label": "000007_BMI_UK18090305_sumy_burin_MIC04", "source_name": "000007_BMI_UK18090305_sumy_burin_MIC04.flac", "source_path": "audio/shared/source/nmUmlcfjI90__nmUmlcfjI90_000007_BMI_UK18090305_sumy_burin_MIC04.mp3", "target_label": "000007_mixture", "target_name": "000007_mixture.flac", "target_path": "audio/shared/target/nmUmlcfjI90__nmUmlcfjI90_000007_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "-0.0030", "value": -0.0029795390812934475}, "f0_rmse": {"display": "0.972", "value": 0.9722156524658203}, "resemblyzer_similarity": {"display": "0.1320", "value": 0.1319824457168579}, "singmos_naturalness": {"display": "-0.5214", "value": -0.5214109420776367}}, "has_both_runs": true, "index": 32, "item_key": "data/processed/nmUmlcfjI90/000009_BMI_UK18090305_sumy_burin_MIC06.flac::data/processed/nmUmlcfjI90/000009_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000009_BMI_UK18090305_sumy_burin_MIC06.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9843", "error": null, "sort_value": 0.9843119410725426, "status": "ok", "value": 0.9843119410725426}, "f0_rmse": {"display": "9.929", "error": null, "sort_value": -9.928773880004883, "status": "ok", "value": 9.928773880004883}, "resemblyzer_similarity": {"display": "0.7415", "error": null, "sort_value": 0.7415119409561157, "status": "ok", "value": 0.7415119409561157}, "singmos_naturalness": {"display": "3.9814", "error": null, "sort_value": 3.9814200401306152, "status": "ok", "value": 3.9814200401306152}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000009_BMI_UK18090305_sumy_burin_MIC06.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9813", "error": null, "sort_value": 0.9813324019912492, "status": "ok", "value": 0.9813324019912492}, "f0_rmse": {"display": "10.901", "error": null, "sort_value": -10.900989532470703, "status": "ok", "value": 10.900989532470703}, "resemblyzer_similarity": {"display": "0.8735", "error": null, "sort_value": 0.8734943866729736, "status": "ok", "value": 0.8734943866729736}, "singmos_naturalness": {"display": "3.4600", "error": null, "sort_value": 3.4600090980529785, "status": "ok", "value": 3.4600090980529785}}}, "source_label": "000009_BMI_UK18090305_sumy_burin_MIC06", "source_name": "000009_BMI_UK18090305_sumy_burin_MIC06.flac", "source_path": "audio/shared/source/nmUmlcfjI90__nmUmlcfjI90_000009_BMI_UK18090305_sumy_burin_MIC06.mp3", "target_label": "000009_mixture", "target_name": "000009_mixture.flac", "target_path": "audio/shared/target/nmUmlcfjI90__nmUmlcfjI90_000009_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "0.0145", "value": 0.014525414605677356}, "f0_rmse": {"display": "-2.180", "value": -2.1801977157592773}, "resemblyzer_similarity": {"display": "0.0878", "value": 0.0877985954284668}, "singmos_naturalness": {"display": "-0.1307", "value": -0.1307392120361328}}, "has_both_runs": true, "index": 33, "item_key": "data/processed/on5A7DoUGao/000000_BMI_UK18060688_volyn_olenyne_MIC02.flac::data/processed/on5A7DoUGao/000000_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000000_BMI_UK18060688_volyn_olenyne_MIC02.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9443", "error": null, "sort_value": 0.9443319058981935, "status": "ok", "value": 0.9443319058981935}, "f0_rmse": {"display": "13.399", "error": null, "sort_value": -13.399295806884766, "status": "ok", "value": 13.399295806884766}, "resemblyzer_similarity": {"display": "0.8019", "error": null, "sort_value": 0.8018993735313416, "status": "ok", "value": 0.8018993735313416}, "singmos_naturalness": {"display": "4.1772", "error": null, "sort_value": 4.17724609375, "status": "ok", "value": 4.17724609375}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000000_BMI_UK18060688_volyn_olenyne_MIC02.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9589", "error": null, "sort_value": 0.9588573205038708, "status": "ok", "value": 0.9588573205038708}, "f0_rmse": {"display": "11.219", "error": null, "sort_value": -11.219098091125488, "status": "ok", "value": 11.219098091125488}, "resemblyzer_similarity": {"display": "0.8897", "error": null, "sort_value": 0.8896979689598083, "status": "ok", "value": 0.8896979689598083}, "singmos_naturalness": {"display": "4.0465", "error": null, "sort_value": 4.046506881713867, "status": "ok", "value": 4.046506881713867}}}, "source_label": "000000_BMI_UK18060688_volyn_olenyne_MIC02", "source_name": "000000_BMI_UK18060688_volyn_olenyne_MIC02.flac", "source_path": "audio/shared/source/on5A7DoUGao__on5A7DoUGao_000000_BMI_UK18060688_volyn_olenyne_MIC02.mp3", "target_label": "000000_mixture", "target_name": "000000_mixture.flac", "target_path": "audio/shared/target/on5A7DoUGao__on5A7DoUGao_000000_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "0.0100", "value": 0.010010174579163422}, "f0_rmse": {"display": "-0.899", "value": -0.8990240097045898}, "resemblyzer_similarity": {"display": "0.1097", "value": 0.10970163345336914}, "singmos_naturalness": {"display": "-0.5317", "value": -0.5317108631134033}}, "has_both_runs": true, "index": 34, "item_key": "data/processed/ou5qvqUSQAQ/000000_BMI_UK18090013_kiev_velyka-dymerka_MIC01.flac::data/processed/ou5qvqUSQAQ/000000_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000000_BMI_UK18090013_kiev_velyka-dymerka_MIC01.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9288", "error": null, "sort_value": 0.9288427581253386, "status": "ok", "value": 0.9288427581253386}, "f0_rmse": {"display": "13.949", "error": null, "sort_value": -13.948922157287598, "status": "ok", "value": 13.948922157287598}, "resemblyzer_similarity": {"display": "0.7743", "error": null, "sort_value": 0.774253785610199, "status": "ok", "value": 0.774253785610199}, "singmos_naturalness": {"display": "3.4305", "error": null, "sort_value": 3.4304938316345215, "status": "ok", "value": 3.4304938316345215}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000000_BMI_UK18090013_kiev_velyka-dymerka_MIC01.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9389", "error": null, "sort_value": 0.938852932704502, "status": "ok", "value": 0.938852932704502}, "f0_rmse": {"display": "13.050", "error": null, "sort_value": -13.049898147583008, "status": "ok", "value": 13.049898147583008}, "resemblyzer_similarity": {"display": "0.8840", "error": null, "sort_value": 0.8839554190635681, "status": "ok", "value": 0.8839554190635681}, "singmos_naturalness": {"display": "2.8988", "error": null, "sort_value": 2.898782968521118, "status": "ok", "value": 2.898782968521118}}}, "source_label": "000000_BMI_UK18090013_kiev_velyka-dymerka_MIC01", "source_name": "000000_BMI_UK18090013_kiev_velyka-dymerka_MIC01.flac", "source_path": "audio/shared/source/ou5qvqUSQAQ__ou5qvqUSQAQ_000000_BMI_UK18090013_kiev_velyka-dymerka_MIC01.mp3", "target_label": "000000_mixture", "target_name": "000000_mixture.flac", "target_path": "audio/shared/target/ou5qvqUSQAQ__ou5qvqUSQAQ_000000_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "-0.0347", "value": -0.03467804251347251}, "f0_rmse": {"display": "5.656", "value": 5.655820846557617}, "resemblyzer_similarity": {"display": "0.2207", "value": 0.2206960916519165}, "singmos_naturalness": {"display": "-0.5045", "value": -0.5044705867767334}}, "has_both_runs": true, "index": 35, "item_key": "data/processed/toaeaTwqjLI/000000_BMI_UK20080099_lviv_hlynytsi_MIC02.flac::data/processed/toaeaTwqjLI/000000_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000000_BMI_UK20080099_lviv_hlynytsi_MIC02.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9845", "error": null, "sort_value": 0.9845379727275484, "status": "ok", "value": 0.9845379727275484}, "f0_rmse": {"display": "8.412", "error": null, "sort_value": -8.4115571975708, "status": "ok", "value": 8.4115571975708}, "resemblyzer_similarity": {"display": "0.6838", "error": null, "sort_value": 0.6837559938430786, "status": "ok", "value": 0.6837559938430786}, "singmos_naturalness": {"display": "3.6872", "error": null, "sort_value": 3.687152624130249, "status": "ok", "value": 3.687152624130249}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000000_BMI_UK20080099_lviv_hlynytsi_MIC02.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9499", "error": null, "sort_value": 0.9498599302140759, "status": "ok", "value": 0.9498599302140759}, "f0_rmse": {"display": "14.067", "error": null, "sort_value": -14.067378044128418, "status": "ok", "value": 14.067378044128418}, "resemblyzer_similarity": {"display": "0.9045", "error": null, "sort_value": 0.9044520854949951, "status": "ok", "value": 0.9044520854949951}, "singmos_naturalness": {"display": "3.1827", "error": null, "sort_value": 3.1826820373535156, "status": "ok", "value": 3.1826820373535156}}}, "source_label": "000000_BMI_UK20080099_lviv_hlynytsi_MIC02", "source_name": "000000_BMI_UK20080099_lviv_hlynytsi_MIC02.flac", "source_path": "audio/shared/source/toaeaTwqjLI__toaeaTwqjLI_000000_BMI_UK20080099_lviv_hlynytsi_MIC02.mp3", "target_label": "000000_mixture", "target_name": "000000_mixture.flac", "target_path": "audio/shared/target/toaeaTwqjLI__toaeaTwqjLI_000000_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "0.0061", "value": 0.006131628142203249}, "f0_rmse": {"display": "-0.699", "value": -0.6992015838623047}, "resemblyzer_similarity": {"display": "0.1734", "value": 0.17338252067565918}, "singmos_naturalness": {"display": "-0.4823", "value": -0.4823479652404785}}, "has_both_runs": true, "index": 36, "item_key": "data/processed/toaeaTwqjLI/000003_BMI_UK20080099_lviv_hlynytsi_MIC02.flac::data/processed/toaeaTwqjLI/000003_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000003_BMI_UK20080099_lviv_hlynytsi_MIC02.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9398", "error": null, "sort_value": 0.9398402966024821, "status": "ok", "value": 0.9398402966024821}, "f0_rmse": {"display": "12.811", "error": null, "sort_value": -12.81117057800293, "status": "ok", "value": 12.81117057800293}, "resemblyzer_similarity": {"display": "0.7200", "error": null, "sort_value": 0.7199751138687134, "status": "ok", "value": 0.7199751138687134}, "singmos_naturalness": {"display": "3.7138", "error": null, "sort_value": 3.713803291320801, "status": "ok", "value": 3.713803291320801}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000003_BMI_UK20080099_lviv_hlynytsi_MIC02.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9460", "error": null, "sort_value": 0.9459719247446854, "status": "ok", "value": 0.9459719247446854}, "f0_rmse": {"display": "12.112", "error": null, "sort_value": -12.111968994140625, "status": "ok", "value": 12.111968994140625}, "resemblyzer_similarity": {"display": "0.8934", "error": null, "sort_value": 0.8933576345443726, "status": "ok", "value": 0.8933576345443726}, "singmos_naturalness": {"display": "3.2315", "error": null, "sort_value": 3.2314553260803223, "status": "ok", "value": 3.2314553260803223}}}, "source_label": "000003_BMI_UK20080099_lviv_hlynytsi_MIC02", "source_name": "000003_BMI_UK20080099_lviv_hlynytsi_MIC02.flac", "source_path": "audio/shared/source/toaeaTwqjLI__toaeaTwqjLI_000003_BMI_UK20080099_lviv_hlynytsi_MIC02.mp3", "target_label": "000003_mixture", "target_name": "000003_mixture.flac", "target_path": "audio/shared/target/toaeaTwqjLI__toaeaTwqjLI_000003_mixture.mp3"}, {"deltas": {"f0_correlation": {"display": "0.0212", "value": 0.0211771583827296}, "f0_rmse": {"display": "-3.417", "value": -3.416762351989746}, "resemblyzer_similarity": {"display": "0.0615", "value": 0.06154990196228027}, "singmos_naturalness": {"display": "-0.5396", "value": -0.5396161079406738}}, "has_both_runs": true, "index": 37, "item_key": "data/processed/toaeaTwqjLI/000003_BMI_UK20080099_lviv_hlynytsi_MIC04.flac::data/processed/toaeaTwqjLI/000003_mixture.flac", "run_a": {"generated_path": "audio/run_a/generated/20260331-110657__000003_BMI_UK20080099_lviv_hlynytsi_MIC04.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9366", "error": null, "sort_value": 0.9366061215239435, "status": "ok", "value": 0.9366061215239435}, "f0_rmse": {"display": "16.681", "error": null, "sort_value": -16.68085479736328, "status": "ok", "value": 16.68085479736328}, "resemblyzer_similarity": {"display": "0.8185", "error": null, "sort_value": 0.8185351490974426, "status": "ok", "value": 0.8185351490974426}, "singmos_naturalness": {"display": "4.2089", "error": null, "sort_value": 4.208942890167236, "status": "ok", "value": 4.208942890167236}}}, "run_b": {"generated_path": "audio/run_b/generated/20260331-105848__000003_BMI_UK20080099_lviv_hlynytsi_MIC04.mp3", "generation_status": "generated", "metrics": {"f0_correlation": {"display": "0.9578", "error": null, "sort_value": 0.9577832799066731, "status": "ok", "value": 0.9577832799066731}, "f0_rmse": {"display": "13.264", "error": null, "sort_value": -13.264092445373535, "status": "ok", "value": 13.264092445373535}, "resemblyzer_similarity": {"display": "0.8801", "error": null, "sort_value": 0.8800850510597229, "status": "ok", "value": 0.8800850510597229}, "singmos_naturalness": {"display": "3.6693", "error": null, "sort_value": 3.6693267822265625, "status": "ok", "value": 3.6693267822265625}}}, "source_label": "000003_BMI_UK20080099_lviv_hlynytsi_MIC04", "source_name": "000003_BMI_UK20080099_lviv_hlynytsi_MIC04.flac", "source_path": "audio/shared/source/toaeaTwqjLI__toaeaTwqjLI_000003_BMI_UK20080099_lviv_hlynytsi_MIC04.mp3", "target_label": "000003_mixture", "target_name": "000003_mixture.flac", "target_path": "audio/shared/target/toaeaTwqjLI__toaeaTwqjLI_000003_mixture.mp3"}];
+    const metricSelect = document.getElementById('metricSelect');
     const sortOrder = document.getElementById('sortOrder');
-    const minRunA = document.getElementById('minRunA');
-    const minRunB = document.getElementById('minRunB');
     const requireBoth = document.getElementById('requireBoth');
+    const statusFilter = document.getElementById('statusFilter');
     const clearFilters = document.getElementById('clearFilters');
+    const tbody = document.getElementById('rows');
     const visibleCount = document.getElementById('visibleCount');
 
-    function parseNumber(value) {
-      if (value === '') return null;
-      const parsed = Number(value);
-      return Number.isFinite(parsed) ? parsed : null;
+    for (const metric of metrics) {
+      const option = document.createElement('option');
+      option.value = metric.key;
+      option.textContent = `${metric.label} (${metric.direction} is better)`;
+      if (metric.key === defaultMetricKey) option.selected = true;
+      metricSelect.appendChild(option);
     }
 
-    function rowNumber(row, key) {
-      return parseNumber(row.dataset[key]);
+    function metricMeta(key) {
+      return metrics.find((metric) => metric.key === key) || { key, label: key, short_label: key, direction: 'higher' };
     }
 
-    function updateView() {
-      const minA = parseNumber(minRunA.value);
-      const minB = parseNumber(minRunB.value);
-      const needBoth = requireBoth.value === 'yes';
+    function runMetric(run, key) {
+      if (!run) return { display: 'N/A', status: 'missing_run', error: null, value: null, sort_value: null };
+      return run.metrics[key] || { display: 'N/A', status: 'not_run', error: null, value: null, sort_value: null };
+    }
 
-      rows.forEach((row) => {
-        const runA = rowNumber(row, 'runA');
-        const runB = rowNumber(row, 'runB');
-        const hasBoth = row.dataset.hasBoth === 'true';
-        const hide =
-          (minA !== null && (runA === null || runA < minA)) ||
-          (minB !== null && (runB === null || runB < minB)) ||
-          (needBoth && !hasBoth);
-        row.classList.toggle('hidden', hide);
+    function metricPillClass(cell) {
+      if (cell.status === 'ok') return 'metric-pill';
+      if (cell.status === 'disabled' || cell.status === 'unavailable' || cell.status === 'not_run' || cell.status === 'missing_run') return 'metric-pill na';
+      if (cell.status === 'missing_generated') return 'metric-pill warn';
+      return 'metric-pill bad';
+    }
+
+    function deltaClass(value) {
+      if (value === null) return 'metric-pill na';
+      if (value > 0) return 'metric-pill delta-positive';
+      if (value < 0) return 'metric-pill delta-negative';
+      return 'metric-pill';
+    }
+
+    function renderRows() {
+      const selectedMetric = metricSelect.value;
+      for (const card of document.querySelectorAll('[data-metric-card]')) {
+        card.classList.toggle('active', card.dataset.metricCard === selectedMetric);
+      }
+
+      const filtered = rows.filter((row) => {
+        const runA = runMetric(row.run_a, selectedMetric);
+        const runB = runMetric(row.run_b, selectedMetric);
+        if (requireBoth.value === 'yes' && !row.has_both_runs) return false;
+        if (statusFilter.value === 'ok') return runA.status === 'ok' && runB.status === 'ok';
+        if (statusFilter.value === 'issues') return runA.status !== 'ok' || runB.status !== 'ok';
+        return true;
       });
 
-      const ordered = [...rows];
-      const mode = sortOrder.value;
-      const keyMap = {
-        'delta-desc': ['delta', -1],
-        'delta-asc': ['delta', 1],
-        'run-b-desc': ['runB', -1],
-        'run-a-desc': ['runA', -1],
-      };
-
-      if (mode === 'original') {
-        ordered.sort((a, b) => Number(a.dataset.order) - Number(b.dataset.order));
-      } else {
-        const [key, direction] = keyMap[mode];
-        ordered.sort((a, b) => {
-          const left = rowNumber(a, key);
-          const right = rowNumber(b, key);
-          if (left === null && right === null) return Number(a.dataset.order) - Number(b.dataset.order);
-          if (left === null) return 1;
-          if (right === null) return -1;
-          if (left === right) return Number(a.dataset.order) - Number(b.dataset.order);
-          return left < right ? direction : -direction;
+      if (sortOrder.value !== 'original') {
+        filtered.sort((a, b) => {
+          const aRunA = runMetric(a.run_a, selectedMetric);
+          const aRunB = runMetric(a.run_b, selectedMetric);
+          const bRunA = runMetric(b.run_a, selectedMetric);
+          const bRunB = runMetric(b.run_b, selectedMetric);
+          const aDelta = a.deltas[selectedMetric]?.value;
+          const bDelta = b.deltas[selectedMetric]?.value;
+          const score = (mode, left, right) => {
+            if (left === null && right === null) return 0;
+            if (left === null) return 1;
+            if (right === null) return -1;
+            return mode === 'desc' ? right - left : left - right;
+          };
+          if (sortOrder.value === 'delta-best') return score('desc', aDelta, bDelta);
+          if (sortOrder.value === 'delta-worst') return score('asc', aDelta, bDelta);
+          if (sortOrder.value === 'run-b-best') return score('desc', aRunB.sort_value, bRunB.sort_value);
+          if (sortOrder.value === 'run-a-best') return score('desc', aRunA.sort_value, bRunA.sort_value);
+          return 0;
         });
       }
 
       tbody.innerHTML = '';
-      ordered.forEach((row) => tbody.appendChild(row));
+      filtered.forEach((row, index) => {
+        const runA = runMetric(row.run_a, selectedMetric);
+        const runB = runMetric(row.run_b, selectedMetric);
+        const delta = row.deltas[selectedMetric] || { display: 'N/A', value: null };
+        const runAStrip = metrics.map((metric) => {
+          const cell = runMetric(row.run_a, metric.key);
+          return `<span class="${metricPillClass(cell)}">${metric.short_label}: ${cell.display}</span>`;
+        }).join('');
+        const runBStrip = metrics.map((metric) => {
+          const cell = runMetric(row.run_b, metric.key);
+          return `<span class="${metricPillClass(cell)}">${metric.short_label}: ${cell.display}</span>`;
+        }).join('');
 
-      const visible = rows.filter((row) => !row.classList.contains('hidden')).length;
-      visibleCount.textContent = `${visible} of ${rows.length} rows visible`;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${index + 1}</td>
+          <td>
+            <div class="file-label">${row.source_name}</div>
+            <div class="status">target: ${row.target_name}</div>
+          </td>
+          <td>
+            <div class="file-label">Source</div>
+            <audio controls preload="none" src="${row.source_path || ''}"></audio>
+          </td>
+          <td>
+            <div class="file-label">Target</div>
+            <audio controls preload="none" src="${row.target_path || ''}"></audio>
+          </td>
+          <td>
+            <div class="file-label">${metricMeta(selectedMetric).label}: ${runA.display}</div>
+            <div class="status ${runA.error ? 'error' : ''}">status=${runA.status}${runA.error ? `<br>${runA.error}` : ''}</div>
+            <div>${runAStrip}</div>
+            ${row.run_a && row.run_a.generated_path ? `<audio controls preload="none" src="${row.run_a.generated_path}"></audio>` : '<div class="status">Generated audio unavailable</div>'}
+          </td>
+          <td>
+            <div class="file-label">${metricMeta(selectedMetric).label}: ${runB.display}</div>
+            <div class="status ${runB.error ? 'error' : ''}">status=${runB.status}${runB.error ? `<br>${runB.error}` : ''}</div>
+            <div>${runBStrip}</div>
+            ${row.run_b && row.run_b.generated_path ? `<audio controls preload="none" src="${row.run_b.generated_path}"></audio>` : '<div class="status">Generated audio unavailable</div>'}
+          </td>
+          <td>
+            <div class="file-label">Run B - Run A</div>
+            <div class="${deltaClass(delta.value)}">${delta.display}</div>
+            <div class="status">Shown only when both runs have the selected metric.</div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      visibleCount.textContent = `Showing ${filtered.length} / ${rows.length} rows for ${metricMeta(selectedMetric).label}`;
     }
 
-    [sortOrder, minRunA, minRunB, requireBoth].forEach((el) => {
-      el.addEventListener('input', updateView);
-      el.addEventListener('change', updateView);
-    });
-
+    metricSelect.addEventListener('change', renderRows);
+    sortOrder.addEventListener('change', renderRows);
+    requireBoth.addEventListener('change', renderRows);
+    statusFilter.addEventListener('change', renderRows);
     clearFilters.addEventListener('click', () => {
-      sortOrder.value = 'delta-desc';
-      minRunA.value = '';
-      minRunB.value = '';
+      metricSelect.value = defaultMetricKey;
+      sortOrder.value = 'delta-best';
       requireBoth.value = 'no';
-      updateView();
+      statusFilter.value = 'all';
+      renderRows();
     });
 
-    updateView();
+    renderRows();
   </script>
 </body>
 </html>

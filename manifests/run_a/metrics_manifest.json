@@ -1,37 +1,176 @@
 {
-  "schema_version": 1,
-  "created_at": "2026-03-14T01:26:52.056557+00:00",
+  "schema_version": 2,
+  "created_at": "2026-03-31T11:08:46.839544+00:00",
   "dataset_path": "data/processed/val.csv",
   "config_path": "configs/presets/config_dit_mel_seed_uvit_whisper_base_f0_44k.yml",
   "generated_base_dir": "audio/run_a/generated",
+  "metric_definitions": {
+    "resemblyzer_similarity": {
+      "label": "Resemblyzer similarity",
+      "short_label": "Timbre",
+      "category": "Timbre similarity",
+      "description": "Cosine similarity between target and generated Resemblyzer embeddings.",
+      "direction": "higher",
+      "decimals": 4,
+      "optional": false,
+      "enabled_by_default": true,
+      "key": "resemblyzer_similarity",
+      "enabled": true
+    },
+    "f0_rmse": {
+      "label": "F0 RMSE",
+      "short_label": "F0 RMSE",
+      "category": "Melody preservation",
+      "description": "Root-mean-square error between aligned source and generated F0 contours.",
+      "direction": "lower",
+      "decimals": 3,
+      "optional": false,
+      "enabled_by_default": true,
+      "key": "f0_rmse",
+      "enabled": true
+    },
+    "f0_correlation": {
+      "label": "F0 correlation",
+      "short_label": "F0 corr",
+      "category": "Melody preservation",
+      "description": "Pearson correlation between aligned source and generated F0 contours.",
+      "direction": "higher",
+      "decimals": 4,
+      "optional": false,
+      "enabled_by_default": true,
+      "key": "f0_correlation",
+      "enabled": true
+    },
+    "singmos_naturalness": {
+      "label": "SingMOS naturalness",
+      "short_label": "SingMOS",
+      "category": "Naturalness",
+      "description": "Mean SingMOS-Pro score across 5-second generated-audio chunks.",
+      "direction": "higher",
+      "decimals": 4,
+      "optional": true,
+      "enabled_by_default": true,
+      "key": "singmos_naturalness",
+      "enabled": true
+    }
+  },
+  "listening_guidance": [
+    "Check whether the generated output preserves the source melody contour and phrasing.",
+    "Listen for choral timbre similarity against the target mix, not just speaker similarity.",
+    "Listen for artifacts such as metallic tone, blurred attacks, unstable pitch, or smeared harmonics.",
+    "Use SingMOS as a naturalness hint when available, not as a replacement for listening review."
+  ],
   "stages": {
     "generate-results": {
-      "ran_at": "2026-03-14T01:26:52.056574+00:00",
-      "device": "cpu",
-      "generated_count": 9,
+      "ran_at": "2026-03-31T11:08:46.839572+00:00",
+      "device": "cuda",
+      "generated_count": 37,
       "failed_count": 0,
-      "total": 9,
-      "checkpoint": "runs/my_run/DiT_epoch_00007_step_00800.pth",
+      "total": 37,
+      "checkpoint": "./checkpoints/models--Plachta--Seed-VC/snapshots/257283f9f41585055e8f858fba4fd044e5caed6e/DiT_seed_v2_uvit_whisper_base_f0_44k_bigvgan_pruned_ft_ema.pth",
       "generated_template": null,
       "generated_suffix": ".wav"
     },
     "compute-metrics": {
-      "ran_at": "2026-03-14T01:26:54.032543+00:00",
-      "device": "cpu",
+      "ran_at": "2026-03-31T11:10:41.469139+00:00",
+      "device": "cuda",
       "summary": {
-        "metric": "resemblyzer_similarity",
-        "scored": 9,
+        "default_metric": "resemblyzer_similarity",
+        "metrics": {
+          "resemblyzer_similarity": {
+            "key": "resemblyzer_similarity",
+            "label": "Resemblyzer similarity",
+            "short_label": "Timbre",
+            "category": "Timbre similarity",
+            "description": "Cosine similarity between target and generated Resemblyzer embeddings.",
+            "direction": "higher",
+            "optional": false,
+            "enabled": true,
+            "decimals": 4,
+            "status_counts": {
+              "ok": 37
+            },
+            "scored": 37,
+            "mean": 0.7829470634460449,
+            "median": 0.783565104007721,
+            "std": 0.036713507026433945,
+            "min": 0.6837559938430786,
+            "max": 0.8653577566146851
+          },
+          "f0_rmse": {
+            "key": "f0_rmse",
+            "label": "F0 RMSE",
+            "short_label": "F0 RMSE",
+            "category": "Melody preservation",
+            "description": "Root-mean-square error between aligned source and generated F0 contours.",
+            "direction": "lower",
+            "optional": false,
+            "enabled": true,
+            "decimals": 3,
+            "status_counts": {
+              "ok": 37
+            },
+            "scored": 37,
+            "mean": 21.764400482177734,
+            "median": 16.06047821044922,
+            "std": 15.664546012878418,
+            "min": 4.937684059143066,
+            "max": 73.14663696289062
+          },
+          "f0_correlation": {
+            "key": "f0_correlation",
+            "label": "F0 correlation",
+            "short_label": "F0 corr",
+            "category": "Melody preservation",
+            "description": "Pearson correlation between aligned source and generated F0 contours.",
+            "direction": "higher",
+            "optional": false,
+            "enabled": true,
+            "decimals": 4,
+            "status_counts": {
+              "ok": 37
+            },
+            "scored": 37,
+            "mean": 0.9336292147636414,
+            "median": 0.9443318843841553,
+            "std": 0.06023753434419632,
+            "min": 0.6568134427070618,
+            "max": 0.9923833608627319
+          },
+          "singmos_naturalness": {
+            "key": "singmos_naturalness",
+            "label": "SingMOS naturalness",
+            "short_label": "SingMOS",
+            "category": "Naturalness",
+            "description": "Mean SingMOS-Pro score across 5-second generated-audio chunks.",
+            "direction": "higher",
+            "optional": true,
+            "enabled": true,
+            "decimals": 4,
+            "status_counts": {
+              "ok": 36,
+              "metric_failed": 1
+            },
+            "scored": 36,
+            "mean": 3.757965564727783,
+            "median": 3.726605176925659,
+            "std": 0.4867323040962219,
+            "min": 2.5917038917541504,
+            "max": 4.7143402099609375
+          }
+        },
+        "scored": 37,
         "missing": 0,
         "failed": 0,
-        "mean": 0.822641478644477,
-        "median": 0.8163633346557617,
-        "std": 0.030811881493309046,
-        "min": 0.7793539762496948,
-        "max": 0.8794981837272644
+        "mean": 0.7829470634460449,
+        "median": 0.783565104007721,
+        "std": 0.036713507026433945,
+        "min": 0.6837559938430786,
+        "max": 0.8653577566146851
       }
     },
     "build-report": {
-      "ran_at": "2026-03-14T01:26:54.040733+00:00",
+      "ran_at": "2026-03-31T11:10:41.501018+00:00",
       "report_path": "evaluation_comparison.html",
       "template_path": null
     }
@@ -39,110 +178,817 @@
   "items": [
     {
       "id": 0,
-      "source_path": "audio/shared/source/0qeXKXMmvL4__0qeXKXMmvL4_000019_BMI_UK17100724_khmelnytskyi_zeleni_kurylivtsi_MIC05.mp3",
-      "target_path": "audio/shared/target/0qeXKXMmvL4__0qeXKXMmvL4_000019_mixture.mp3",
-      "generated_path": "audio/run_a/generated/20260314-032108__000019_BMI_UK17100724_khmelnytskyi_zeleni_kurylivtsi_MIC05.mp3",
+      "source_path": "audio/shared/source/TBe6pJaN6Vs__TBe6pJaN6Vs_000001_BMI_UK18060012_chernihiv_vovchok_MIC03.mp3",
+      "target_path": "audio/shared/target/TBe6pJaN6Vs__TBe6pJaN6Vs_000001_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000001_BMI_UK18060012_chernihiv_vovchok_MIC03.mp3",
       "generation_status": "generated",
       "error": null,
       "metrics": {
-        "resemblyzer_similarity": 0.8163633346557617
+        "resemblyzer_similarity": 0.7591591477394104,
+        "f0_rmse": 18.44640350341797,
+        "f0_correlation": 0.8375090745038009,
+        "singmos_naturalness": 2.8537330627441406
       },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
       "metric_status": "ok"
     },
     {
       "id": 1,
-      "source_path": "audio/shared/source/-kcWnHngJMA__-kcWnHngJMA_000005_BMI_UK20080216_ivano-frankivsk_pidvynnya_MIC03.mp3",
-      "target_path": "audio/shared/target/-kcWnHngJMA__-kcWnHngJMA_000005_mixture.mp3",
-      "generated_path": "audio/run_a/generated/20260314-032108__000005_BMI_UK20080216_ivano-frankivsk_pidvynnya_MIC03.mp3",
+      "source_path": "audio/shared/source/T-pp2380F9c__T-pp2380F9c_000002_BMI_UK20080294_khmelnytskyi_lysets_MIC04.mp3",
+      "target_path": "audio/shared/target/T-pp2380F9c__T-pp2380F9c_000002_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000002_BMI_UK20080294_khmelnytskyi_lysets_MIC04.mp3",
       "generation_status": "generated",
       "error": null,
       "metrics": {
-        "resemblyzer_similarity": 0.809120237827301
+        "resemblyzer_similarity": 0.7965021729469299,
+        "f0_rmse": 12.919252395629883,
+        "f0_correlation": 0.9478706991259123,
+        "singmos_naturalness": 3.8442800045013428
       },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
       "metric_status": "ok"
     },
     {
       "id": 2,
-      "source_path": "audio/shared/source/-4L87nEO4N4__-4L87nEO4N4_000017_BMI_UK16050016_chernihiv_sofiivka_MIC03.mp3",
-      "target_path": "audio/shared/target/-4L87nEO4N4__-4L87nEO4N4_000017_mixture.mp3",
-      "generated_path": "audio/run_a/generated/20260314-032108__000017_BMI_UK16050016_chernihiv_sofiivka_MIC03.mp3",
+      "source_path": "audio/shared/source/ou5qvqUSQAQ__ou5qvqUSQAQ_000000_BMI_UK18090013_kiev_velyka-dymerka_MIC01.mp3",
+      "target_path": "audio/shared/target/ou5qvqUSQAQ__ou5qvqUSQAQ_000000_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000000_BMI_UK18090013_kiev_velyka-dymerka_MIC01.mp3",
       "generation_status": "generated",
       "error": null,
       "metrics": {
-        "resemblyzer_similarity": 0.8043721318244934
+        "resemblyzer_similarity": 0.774253785610199,
+        "f0_rmse": 13.948922157287598,
+        "f0_correlation": 0.9288427581253386,
+        "singmos_naturalness": 3.4304938316345215
       },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
       "metric_status": "ok"
     },
     {
       "id": 3,
-      "source_path": "audio/shared/source/0xczykQot4E__0xczykQot4E_000020_BMI_UK16050184_dnipropetrovsk_pidhorodne_MIC02.mp3",
-      "target_path": "audio/shared/target/0xczykQot4E__0xczykQot4E_000020_mixture.mp3",
-      "generated_path": "audio/run_a/generated/20260314-032108__000020_BMI_UK16050184_dnipropetrovsk_pidhorodne_MIC02.mp3",
+      "source_path": "audio/shared/source/nmUmlcfjI90__nmUmlcfjI90_000001_BMI_UK18090305_sumy_burin_MIC03.mp3",
+      "target_path": "audio/shared/target/nmUmlcfjI90__nmUmlcfjI90_000001_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000001_BMI_UK18090305_sumy_burin_MIC03.mp3",
       "generation_status": "generated",
       "error": null,
       "metrics": {
-        "resemblyzer_similarity": 0.8402347564697266
+        "resemblyzer_similarity": 0.7571583986282349,
+        "f0_rmse": 13.340215682983398,
+        "f0_correlation": 0.9593546726631141,
+        "singmos_naturalness": 3.4960098266601562
       },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
       "metric_status": "ok"
     },
     {
       "id": 4,
-      "source_path": "audio/shared/source/3MQoX6em51E__3MQoX6em51E_000018_BMI_UK15070071_poltava_solonytsya_MIC03.mp3",
-      "target_path": "audio/shared/target/3MQoX6em51E__3MQoX6em51E_000018_mixture.mp3",
-      "generated_path": "audio/run_a/generated/20260314-032108__000018_BMI_UK15070071_poltava_solonytsya_MIC03.mp3",
+      "source_path": "audio/shared/source/jV7XDLvWg3c__jV7XDLvWg3c_000002_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC03.mp3",
+      "target_path": "audio/shared/target/jV7XDLvWg3c__jV7XDLvWg3c_000002_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000002_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC03.mp3",
       "generation_status": "generated",
       "error": null,
       "metrics": {
-        "resemblyzer_similarity": 0.7793539762496948
+        "resemblyzer_similarity": 0.8120920658111572,
+        "f0_rmse": 16.00417709350586,
+        "f0_correlation": 0.9782378924530428,
+        "singmos_naturalness": 3.5479636192321777
       },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
       "metric_status": "ok"
     },
     {
       "id": 5,
-      "source_path": "audio/shared/source/3MQoX6em51E__3MQoX6em51E_000011_BMI_UK15070071_poltava_solonytsya_MIC01.mp3",
-      "target_path": "audio/shared/target/3MQoX6em51E__3MQoX6em51E_000011_mixture.mp3",
-      "generated_path": "audio/run_a/generated/20260314-032108__000011_BMI_UK15070071_poltava_solonytsya_MIC01.mp3",
+      "source_path": "audio/shared/source/jV7XDLvWg3c__jV7XDLvWg3c_000000_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC04.mp3",
+      "target_path": "audio/shared/target/jV7XDLvWg3c__jV7XDLvWg3c_000000_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000000_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC04.mp3",
       "generation_status": "generated",
       "error": null,
       "metrics": {
-        "resemblyzer_similarity": 0.8582451343536377
+        "resemblyzer_similarity": 0.7908630967140198,
+        "f0_rmse": 24.611886978149414,
+        "f0_correlation": 0.9647623860502805,
+        "singmos_naturalness": 3.1392345428466797
       },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
       "metric_status": "ok"
     },
     {
       "id": 6,
-      "source_path": "audio/shared/source/2XfpKIehW-c__2XfpKIehW-c_000022_BMI_UK16100158_chernihiv_karylsky_MIC03.mp3",
-      "target_path": "audio/shared/target/2XfpKIehW-c__2XfpKIehW-c_000022_mixture.mp3",
-      "generated_path": "audio/run_a/generated/20260314-032108__000022_BMI_UK16100158_chernihiv_karylsky_MIC03.mp3",
+      "source_path": "audio/shared/source/nmUmlcfjI90__nmUmlcfjI90_000005_BMI_UK18090305_sumy_burin_MIC01.mp3",
+      "target_path": "audio/shared/target/nmUmlcfjI90__nmUmlcfjI90_000005_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000005_BMI_UK18090305_sumy_burin_MIC01.mp3",
       "generation_status": "generated",
       "error": null,
       "metrics": {
-        "resemblyzer_similarity": 0.7871630191802979
+        "resemblyzer_similarity": 0.7501887679100037,
+        "f0_rmse": 15.45889663696289,
+        "f0_correlation": 0.9432350691873891,
+        "singmos_naturalness": 4.348674297332764
       },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
       "metric_status": "ok"
     },
     {
       "id": 7,
-      "source_path": "audio/shared/source/0zQ1XXJPORA__0zQ1XXJPORA_000001_BMI_UK16100032_kiev_fasova_MIC02.mp3",
-      "target_path": "audio/shared/target/0zQ1XXJPORA__0zQ1XXJPORA_000001_mixture.mp3",
-      "generated_path": "audio/run_a/generated/20260314-032108__000001_BMI_UK16100032_kiev_fasova_MIC02.mp3",
+      "source_path": "audio/shared/source/Q5X7K-Jc85Q__Q5X7K-Jc85Q_000001_BMI_UK15070074_poltava_solonytsya_MIC01.mp3",
+      "target_path": "audio/shared/target/Q5X7K-Jc85Q__Q5X7K-Jc85Q_000001_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000001_BMI_UK15070074_poltava_solonytsya_MIC01.mp3",
       "generation_status": "generated",
       "error": null,
       "metrics": {
-        "resemblyzer_similarity": 0.8294225335121155
+        "resemblyzer_similarity": 0.7995790243148804,
+        "f0_rmse": 73.14663696289062,
+        "f0_correlation": 0.6568134455831101,
+        "singmos_naturalness": 2.5917038917541504
       },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
       "metric_status": "ok"
     },
     {
       "id": 8,
-      "source_path": "audio/shared/source/-oYOExW80Ps__-oYOExW80Ps_000006_BMI_UK17100190_kherson_bekhtery_MIC01.mp3",
-      "target_path": "audio/shared/target/-oYOExW80Ps__-oYOExW80Ps_000006_mixture.mp3",
-      "generated_path": "audio/run_a/generated/20260314-032108__000006_BMI_UK17100190_kherson_bekhtery_MIC01.mp3",
+      "source_path": "audio/shared/source/RqzLIR_lhzM__RqzLIR_lhzM_000000_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC02.mp3",
+      "target_path": "audio/shared/target/RqzLIR_lhzM__RqzLIR_lhzM_000000_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000000_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC02.mp3",
       "generation_status": "generated",
       "error": null,
       "metrics": {
-        "resemblyzer_similarity": 0.8794981837272644
+        "resemblyzer_similarity": 0.8260782361030579,
+        "f0_rmse": 22.57406997680664,
+        "f0_correlation": 0.9495195194615383,
+        "singmos_naturalness": 3.7253036499023438
       },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 9,
+      "source_path": "audio/shared/source/nmUmlcfjI90__nmUmlcfjI90_000009_BMI_UK18090305_sumy_burin_MIC06.mp3",
+      "target_path": "audio/shared/target/nmUmlcfjI90__nmUmlcfjI90_000009_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000009_BMI_UK18090305_sumy_burin_MIC06.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.7415119409561157,
+        "f0_rmse": 9.928773880004883,
+        "f0_correlation": 0.9843119410725426,
+        "singmos_naturalness": 3.9814200401306152
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 10,
+      "source_path": "audio/shared/source/nmUmlcfjI90__nmUmlcfjI90_000006_BMI_UK18090305_sumy_burin_MIC01.mp3",
+      "target_path": "audio/shared/target/nmUmlcfjI90__nmUmlcfjI90_000006_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000006_BMI_UK18090305_sumy_burin_MIC01.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.7811935544013977,
+        "f0_rmse": 16.06047821044922,
+        "f0_correlation": 0.9366974718319119,
+        "singmos_naturalness": 3.555915594100952
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 11,
+      "source_path": "audio/shared/source/on5A7DoUGao__on5A7DoUGao_000000_BMI_UK18060688_volyn_olenyne_MIC02.mp3",
+      "target_path": "audio/shared/target/on5A7DoUGao__on5A7DoUGao_000000_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000000_BMI_UK18060688_volyn_olenyne_MIC02.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.8018993735313416,
+        "f0_rmse": 13.399295806884766,
+        "f0_correlation": 0.9443319058981935,
+        "singmos_naturalness": 4.17724609375
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 12,
+      "source_path": "audio/shared/source/PlIjo-YzNIA__PlIjo-YzNIA_000000_BMI_UK18090318_sumy_burin_MIC04.mp3",
+      "target_path": "audio/shared/target/PlIjo-YzNIA__PlIjo-YzNIA_000000_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000000_BMI_UK18090318_sumy_burin_MIC04.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.796054482460022,
+        "f0_rmse": 17.306421279907227,
+        "f0_correlation": 0.972507193567919,
+        "singmos_naturalness": 4.346497058868408
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 13,
+      "source_path": "audio/shared/source/PfYetbLkk5c__PfYetbLkk5c_000008_BMI_UK15070075_poltava_solonytsya_MIC01.mp3",
+      "target_path": "audio/shared/target/PfYetbLkk5c__PfYetbLkk5c_000008_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000008_BMI_UK15070075_poltava_solonytsya_MIC01.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.7794008255004883,
+        "f0_rmse": 26.307315826416016,
+        "f0_correlation": 0.8102308632816749,
+        "singmos_naturalness": 3.0920705795288086
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 14,
+      "source_path": "audio/shared/source/aje_N4N19Ws__aje_N4N19Ws_000001_BMI_UK20080059_khmelnytskyi_dyatylivka_MIC04.mp3",
+      "target_path": "audio/shared/target/aje_N4N19Ws__aje_N4N19Ws_000001_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000001_BMI_UK20080059_khmelnytskyi_dyatylivka_MIC04.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.7922574877738953,
+        "f0_rmse": 11.084436416625977,
+        "f0_correlation": 0.9539236810975523,
+        "singmos_naturalness": 4.052605628967285
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 15,
+      "source_path": "audio/shared/source/RqzLIR_lhzM__RqzLIR_lhzM_000003_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC04.mp3",
+      "target_path": "audio/shared/target/RqzLIR_lhzM__RqzLIR_lhzM_000003_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000003_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC04.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.8045907616615295,
+        "f0_rmse": 42.19528579711914,
+        "f0_correlation": 0.93614122931051,
+        "singmos_naturalness": 3.470755100250244
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 16,
+      "source_path": "audio/shared/source/aje_N4N19Ws__aje_N4N19Ws_000002_BMI_UK20080059_khmelnytskyi_dyatylivka_MIC02.mp3",
+      "target_path": "audio/shared/target/aje_N4N19Ws__aje_N4N19Ws_000002_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000002_BMI_UK20080059_khmelnytskyi_dyatylivka_MIC02.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.8337544202804565,
+        "f0_rmse": 4.937684059143066,
+        "f0_correlation": 0.9923833515926805,
+        "singmos_naturalness": 3.2697134017944336
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 17,
+      "source_path": "audio/shared/source/jV7XDLvWg3c__jV7XDLvWg3c_000001_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC02.mp3",
+      "target_path": "audio/shared/target/jV7XDLvWg3c__jV7XDLvWg3c_000001_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000001_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC02.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.7673149108886719,
+        "f0_rmse": 23.061250686645508,
+        "f0_correlation": 0.9669792882596088,
+        "singmos_naturalness": 3.6629881858825684
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 18,
+      "source_path": "audio/shared/source/toaeaTwqjLI__toaeaTwqjLI_000003_BMI_UK20080099_lviv_hlynytsi_MIC02.mp3",
+      "target_path": "audio/shared/target/toaeaTwqjLI__toaeaTwqjLI_000003_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000003_BMI_UK20080099_lviv_hlynytsi_MIC02.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.7199751138687134,
+        "f0_rmse": 12.81117057800293,
+        "f0_correlation": 0.9398402966024821,
+        "singmos_naturalness": 3.713803291320801
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 19,
+      "source_path": "audio/shared/source/toaeaTwqjLI__toaeaTwqjLI_000000_BMI_UK20080099_lviv_hlynytsi_MIC02.mp3",
+      "target_path": "audio/shared/target/toaeaTwqjLI__toaeaTwqjLI_000000_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000000_BMI_UK20080099_lviv_hlynytsi_MIC02.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.6837559938430786,
+        "f0_rmse": 8.4115571975708,
+        "f0_correlation": 0.9845379727275484,
+        "singmos_naturalness": 3.687152624130249
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 20,
+      "source_path": "audio/shared/source/nmUmlcfjI90__nmUmlcfjI90_000004_BMI_UK18090305_sumy_burin_MIC04.mp3",
+      "target_path": "audio/shared/target/nmUmlcfjI90__nmUmlcfjI90_000004_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000004_BMI_UK18090305_sumy_burin_MIC04.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.7614132761955261,
+        "f0_rmse": 14.523218154907227,
+        "f0_correlation": 0.9322786131510368
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "metric_failed"
+      },
+      "metric_errors": {
+        "singmos_naturalness": "4, 2"
+      },
+      "metric_status": "ok"
+    },
+    {
+      "id": 21,
+      "source_path": "audio/shared/source/RqzLIR_lhzM__RqzLIR_lhzM_000001_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC04.mp3",
+      "target_path": "audio/shared/target/RqzLIR_lhzM__RqzLIR_lhzM_000001_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000001_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC04.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.7746490240097046,
+        "f0_rmse": 17.45072364807129,
+        "f0_correlation": 0.9260603377221128,
+        "singmos_naturalness": 4.09244966506958
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 22,
+      "source_path": "audio/shared/source/jV7XDLvWg3c__jV7XDLvWg3c_000002_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC02.mp3",
+      "target_path": "audio/shared/target/jV7XDLvWg3c__jV7XDLvWg3c_000002_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000002_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC02.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.7641595005989075,
+        "f0_rmse": 54.31000900268555,
+        "f0_correlation": 0.9816111493500054,
+        "singmos_naturalness": 4.7143402099609375
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 23,
+      "source_path": "audio/shared/source/T-pp2380F9c__T-pp2380F9c_000000_BMI_UK20080294_khmelnytskyi_lysets_MIC05.mp3",
+      "target_path": "audio/shared/target/T-pp2380F9c__T-pp2380F9c_000000_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000000_BMI_UK20080294_khmelnytskyi_lysets_MIC05.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.8235875964164734,
+        "f0_rmse": 19.824216842651367,
+        "f0_correlation": 0.8660930407113123,
+        "singmos_naturalness": 4.056519031524658
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 24,
+      "source_path": "audio/shared/source/nmUmlcfjI90__nmUmlcfjI90_000001_BMI_UK18090305_sumy_burin_MIC04.mp3",
+      "target_path": "audio/shared/target/nmUmlcfjI90__nmUmlcfjI90_000001_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000001_BMI_UK18090305_sumy_burin_MIC04.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.7632938027381897,
+        "f0_rmse": 11.77780532836914,
+        "f0_correlation": 0.9715532984125727,
+        "singmos_naturalness": 4.512992858886719
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 25,
+      "source_path": "audio/shared/source/n-q4IEo_LCg__n-q4IEo_LCg_000002_BMI_UK17100193_kherson_bekhtery_MIC01.mp3",
+      "target_path": "audio/shared/target/n-q4IEo_LCg__n-q4IEo_LCg_000002_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000002_BMI_UK17100193_kherson_bekhtery_MIC01.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.8301833271980286,
+        "f0_rmse": 16.370967864990234,
+        "f0_correlation": 0.9674260669152148,
+        "singmos_naturalness": 3.965954303741455
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 26,
+      "source_path": "audio/shared/source/toaeaTwqjLI__toaeaTwqjLI_000003_BMI_UK20080099_lviv_hlynytsi_MIC04.mp3",
+      "target_path": "audio/shared/target/toaeaTwqjLI__toaeaTwqjLI_000003_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000003_BMI_UK20080099_lviv_hlynytsi_MIC04.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.8185351490974426,
+        "f0_rmse": 16.68085479736328,
+        "f0_correlation": 0.9366061215239435,
+        "singmos_naturalness": 4.208942890167236
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 27,
+      "source_path": "audio/shared/source/T-pp2380F9c__T-pp2380F9c_000005_BMI_UK20080294_khmelnytskyi_lysets_MIC05.mp3",
+      "target_path": "audio/shared/target/T-pp2380F9c__T-pp2380F9c_000005_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000005_BMI_UK20080294_khmelnytskyi_lysets_MIC05.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.7930638194084167,
+        "f0_rmse": 15.694825172424316,
+        "f0_correlation": 0.9300057027486126,
+        "singmos_naturalness": 4.2437896728515625
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 28,
+      "source_path": "audio/shared/source/GCTaae0LLDM__GCTaae0LLDM_000000_BMI_UK18060061_zhytomyr_kalinivka_MIC01.mp3",
+      "target_path": "audio/shared/target/GCTaae0LLDM__GCTaae0LLDM_000000_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000000_BMI_UK18060061_zhytomyr_kalinivka_MIC01.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.7556936740875244,
+        "f0_rmse": 29.196470260620117,
+        "f0_correlation": 0.8683904339731965,
+        "singmos_naturalness": 4.364583969116211
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 29,
+      "source_path": "audio/shared/source/bw6zx2HCXpU__bw6zx2HCXpU_000001_BMI_UK20080115_lviv_hlynytsi_MIC01.mp3",
+      "target_path": "audio/shared/target/bw6zx2HCXpU__bw6zx2HCXpU_000001_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000001_BMI_UK20080115_lviv_hlynytsi_MIC01.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.783565104007721,
+        "f0_rmse": 61.155033111572266,
+        "f0_correlation": 0.931420807841272,
+        "singmos_naturalness": 3.0692458152770996
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 30,
+      "source_path": "audio/shared/source/PlIjo-YzNIA__PlIjo-YzNIA_000000_BMI_UK18090318_sumy_burin_MIC02.mp3",
+      "target_path": "audio/shared/target/PlIjo-YzNIA__PlIjo-YzNIA_000000_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000000_BMI_UK18090318_sumy_burin_MIC02.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.7339608073234558,
+        "f0_rmse": 61.30223083496094,
+        "f0_correlation": 0.9460206831078185,
+        "singmos_naturalness": 3.8578858375549316
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 31,
+      "source_path": "audio/shared/source/nmUmlcfjI90__nmUmlcfjI90_000007_BMI_UK18090305_sumy_burin_MIC04.mp3",
+      "target_path": "audio/shared/target/nmUmlcfjI90__nmUmlcfjI90_000007_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000007_BMI_UK18090305_sumy_burin_MIC04.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.7163287401199341,
+        "f0_rmse": 13.220277786254883,
+        "f0_correlation": 0.9747621320364178,
+        "singmos_naturalness": 3.7279067039489746
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 32,
+      "source_path": "audio/shared/source/PlIjo-YzNIA__PlIjo-YzNIA_000000_BMI_UK18090318_sumy_burin_MIC01.mp3",
+      "target_path": "audio/shared/target/PlIjo-YzNIA__PlIjo-YzNIA_000000_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000000_BMI_UK18090318_sumy_burin_MIC01.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.7733416557312012,
+        "f0_rmse": 15.0594482421875,
+        "f0_correlation": 0.9534078053510355,
+        "singmos_naturalness": 4.21541690826416
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 33,
+      "source_path": "audio/shared/source/jWD6oJ8QwAc__jWD6oJ8QwAc_000000_BMI_UK17100199_kherson_bekhtery_MIC01.mp3",
+      "target_path": "audio/shared/target/jWD6oJ8QwAc__jWD6oJ8QwAc_000000_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000000_BMI_UK17100199_kherson_bekhtery_MIC01.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.8653577566146851,
+        "f0_rmse": 12.723819732666016,
+        "f0_correlation": 0.9669258444362079,
+        "singmos_naturalness": 4.061348915100098
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 34,
+      "source_path": "audio/shared/source/klcrcVLxrSE__klcrcVLxrSE_000001_BMI_UK18060574_rivne_krychylsk_MIC03_20.mp3",
+      "target_path": "audio/shared/target/klcrcVLxrSE__klcrcVLxrSE_000001_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000001_BMI_UK18060574_rivne_krychylsk_MIC03_20.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.7924003601074219,
+        "f0_rmse": 17.098440170288086,
+        "f0_correlation": 0.9380461505924532,
+        "singmos_naturalness": 3.7113938331604004
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 35,
+      "source_path": "audio/shared/source/T-pp2380F9c__T-pp2380F9c_000004_BMI_UK20080294_khmelnytskyi_lysets_MIC02.mp3",
+      "target_path": "audio/shared/target/T-pp2380F9c__T-pp2380F9c_000004_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000004_BMI_UK20080294_khmelnytskyi_lysets_MIC02.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.8299937844276428,
+        "f0_rmse": 14.91370677947998,
+        "f0_correlation": 0.9340491889012682,
+        "singmos_naturalness": 3.066729784011841
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
+      "metric_status": "ok"
+    },
+    {
+      "id": 36,
+      "source_path": "audio/shared/source/RqzLIR_lhzM__RqzLIR_lhzM_000000_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC05.mp3",
+      "target_path": "audio/shared/target/RqzLIR_lhzM__RqzLIR_lhzM_000000_mixture.mp3",
+      "generated_path": "audio/run_a/generated/20260331-110657__000000_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC05.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {
+        "resemblyzer_similarity": 0.8219296336174011,
+        "f0_rmse": 18.026681900024414,
+        "f0_correlation": 0.9315934731580554,
+        "singmos_naturalness": 3.429705858230591
+      },
+      "metric_statuses": {
+        "resemblyzer_similarity": "ok",
+        "f0_rmse": "ok",
+        "f0_correlation": "ok",
+        "singmos_naturalness": "ok"
+      },
+      "metric_errors": {},
       "metric_status": "ok"
     }
   ]

@@ -1,17 +1,73 @@
 {
-  "schema_version": 1,
-  "created_at": "2026-03-17T14:08:35.129238+00:00",
+  "schema_version": 2,
+  "created_at": "2026-03-31T11:00:45.591093+00:00",
   "dataset_path": "data/processed/val.csv",
   "config_path": "configs/presets/config_dit_mel_seed_uvit_whisper_base_f0_44k.yml",
   "generated_base_dir": "audio/run_b/generated",
+  "metric_definitions": {
+    "resemblyzer_similarity": {
+      "label": "Resemblyzer similarity",
+      "short_label": "Timbre",
+      "category": "Timbre similarity",
+      "description": "Cosine similarity between target and generated Resemblyzer embeddings.",
+      "direction": "higher",
+      "decimals": 4,
+      "optional": false,
+      "enabled_by_default": true,
+      "key": "resemblyzer_similarity",
+      "enabled": true
+    },
+    "f0_rmse": {
+      "label": "F0 RMSE",
+      "short_label": "F0 RMSE",
+      "category": "Melody preservation",
+      "description": "Root-mean-square error between aligned source and generated F0 contours.",
+      "direction": "lower",
+      "decimals": 3,
+      "optional": false,
+      "enabled_by_default": true,
+      "key": "f0_rmse",
+      "enabled": true
+    },
+    "f0_correlation": {
+      "label": "F0 correlation",
+      "short_label": "F0 corr",
+      "category": "Melody preservation",
+      "description": "Pearson correlation between aligned source and generated F0 contours.",
+      "direction": "higher",
+      "decimals": 4,
+      "optional": false,
+      "enabled_by_default": true,
+      "key": "f0_correlation",
+      "enabled": true
+    },
+    "singmos_naturalness": {
+      "label": "SingMOS naturalness",
+      "short_label": "SingMOS",
+      "category": "Naturalness",
+      "description": "Mean SingMOS-Pro score across 5-second generated-audio chunks.",
+      "direction": "higher",
+      "decimals": 4,
+      "optional": true,
+      "enabled_by_default": true,
+      "key": "singmos_naturalness",
+      "enabled": false
+    }
+  },
+  "listening_guidance": [
+    "Check whether the generated output preserves the source melody contour and phrasing.",
+    "Listen for choral timbre similarity against the target mix, not just speaker similarity.",
+    "Listen for artifacts such as metallic tone, blurred attacks, unstable pitch, or smeared harmonics.",
+    "Use SingMOS as a naturalness hint when available, not as a replacement for listening review."
+  ],
   "stages": {
     "generate-results": {
-      "ran_at": "2026-03-17T14:08:35.129257+00:00",
-      "device": "cpu",
-      "generated_count": 9,
+      "ran_at": "2026-03-31T11:00:45.591121+00:00",
+      "device": "cuda",
+      "generated_count": 37,
       "failed_count": 0,
-      "total": 9,
-      "checkpoint": "./checkpoints/models--Plachta--Seed-VC/snapshots/257283f9f41585055e8f858fba4fd044e5caed6e/DiT_seed_v2_uvit_whisper_base_f0_44k_bigvgan_pruned_ft_ema.pth",
+      "total": 37,
+      "checkpoint": "runs/my_run-hydra-nfdsnflksdjflkds_2026-03-31_09-33-42/DiT_epoch_00055_step_09500.pth",
       "generated_template": null,
       "generated_suffix": ".wav"
     }
@@ -19,84 +75,410 @@
   "items": [
     {
       "id": 0,
-      "source_path": "audio/shared/source/0qeXKXMmvL4__0qeXKXMmvL4_000019_BMI_UK17100724_khmelnytskyi_zeleni_kurylivtsi_MIC05.mp3",
-      "target_path": "audio/shared/target/0qeXKXMmvL4__0qeXKXMmvL4_000019_mixture.mp3",
-      "generated_path": "audio/run_b/generated/20260317-160236__000019_BMI_UK17100724_khmelnytskyi_zeleni_kurylivtsi_MIC05.mp3",
+      "source_path": "audio/shared/source/TBe6pJaN6Vs__TBe6pJaN6Vs_000001_BMI_UK18060012_chernihiv_vovchok_MIC03.mp3",
+      "target_path": "audio/shared/target/TBe6pJaN6Vs__TBe6pJaN6Vs_000001_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000001_BMI_UK18060012_chernihiv_vovchok_MIC03.mp3",
       "generation_status": "generated",
       "error": null,
-      "metrics": {}
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
     },
     {
       "id": 1,
-      "source_path": "audio/shared/source/-kcWnHngJMA__-kcWnHngJMA_000005_BMI_UK20080216_ivano-frankivsk_pidvynnya_MIC03.mp3",
-      "target_path": "audio/shared/target/-kcWnHngJMA__-kcWnHngJMA_000005_mixture.mp3",
-      "generated_path": "audio/run_b/generated/20260317-160236__000005_BMI_UK20080216_ivano-frankivsk_pidvynnya_MIC03.mp3",
+      "source_path": "audio/shared/source/T-pp2380F9c__T-pp2380F9c_000002_BMI_UK20080294_khmelnytskyi_lysets_MIC04.mp3",
+      "target_path": "audio/shared/target/T-pp2380F9c__T-pp2380F9c_000002_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000002_BMI_UK20080294_khmelnytskyi_lysets_MIC04.mp3",
       "generation_status": "generated",
       "error": null,
-      "metrics": {}
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
     },
     {
       "id": 2,
-      "source_path": "audio/shared/source/-4L87nEO4N4__-4L87nEO4N4_000017_BMI_UK16050016_chernihiv_sofiivka_MIC03.mp3",
-      "target_path": "audio/shared/target/-4L87nEO4N4__-4L87nEO4N4_000017_mixture.mp3",
-      "generated_path": "audio/run_b/generated/20260317-160236__000017_BMI_UK16050016_chernihiv_sofiivka_MIC03.mp3",
+      "source_path": "audio/shared/source/ou5qvqUSQAQ__ou5qvqUSQAQ_000000_BMI_UK18090013_kiev_velyka-dymerka_MIC01.mp3",
+      "target_path": "audio/shared/target/ou5qvqUSQAQ__ou5qvqUSQAQ_000000_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000000_BMI_UK18090013_kiev_velyka-dymerka_MIC01.mp3",
       "generation_status": "generated",
       "error": null,
-      "metrics": {}
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
     },
     {
       "id": 3,
-      "source_path": "audio/shared/source/0xczykQot4E__0xczykQot4E_000020_BMI_UK16050184_dnipropetrovsk_pidhorodne_MIC02.mp3",
-      "target_path": "audio/shared/target/0xczykQot4E__0xczykQot4E_000020_mixture.mp3",
-      "generated_path": "audio/run_b/generated/20260317-160236__000020_BMI_UK16050184_dnipropetrovsk_pidhorodne_MIC02.mp3",
+      "source_path": "audio/shared/source/nmUmlcfjI90__nmUmlcfjI90_000001_BMI_UK18090305_sumy_burin_MIC03.mp3",
+      "target_path": "audio/shared/target/nmUmlcfjI90__nmUmlcfjI90_000001_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000001_BMI_UK18090305_sumy_burin_MIC03.mp3",
       "generation_status": "generated",
       "error": null,
-      "metrics": {}
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
     },
     {
       "id": 4,
-      "source_path": "audio/shared/source/3MQoX6em51E__3MQoX6em51E_000018_BMI_UK15070071_poltava_solonytsya_MIC03.mp3",
-      "target_path": "audio/shared/target/3MQoX6em51E__3MQoX6em51E_000018_mixture.mp3",
-      "generated_path": "audio/run_b/generated/20260317-160236__000018_BMI_UK15070071_poltava_solonytsya_MIC03.mp3",
+      "source_path": "audio/shared/source/jV7XDLvWg3c__jV7XDLvWg3c_000002_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC03.mp3",
+      "target_path": "audio/shared/target/jV7XDLvWg3c__jV7XDLvWg3c_000002_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000002_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC03.mp3",
       "generation_status": "generated",
       "error": null,
-      "metrics": {}
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
     },
     {
       "id": 5,
-      "source_path": "audio/shared/source/3MQoX6em51E__3MQoX6em51E_000011_BMI_UK15070071_poltava_solonytsya_MIC01.mp3",
-      "target_path": "audio/shared/target/3MQoX6em51E__3MQoX6em51E_000011_mixture.mp3",
-      "generated_path": "audio/run_b/generated/20260317-160236__000011_BMI_UK15070071_poltava_solonytsya_MIC01.mp3",
+      "source_path": "audio/shared/source/jV7XDLvWg3c__jV7XDLvWg3c_000000_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC04.mp3",
+      "target_path": "audio/shared/target/jV7XDLvWg3c__jV7XDLvWg3c_000000_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000000_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC04.mp3",
       "generation_status": "generated",
       "error": null,
-      "metrics": {}
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
     },
     {
       "id": 6,
-      "source_path": "audio/shared/source/2XfpKIehW-c__2XfpKIehW-c_000022_BMI_UK16100158_chernihiv_karylsky_MIC03.mp3",
-      "target_path": "audio/shared/target/2XfpKIehW-c__2XfpKIehW-c_000022_mixture.mp3",
-      "generated_path": "audio/run_b/generated/20260317-160236__000022_BMI_UK16100158_chernihiv_karylsky_MIC03.mp3",
+      "source_path": "audio/shared/source/nmUmlcfjI90__nmUmlcfjI90_000005_BMI_UK18090305_sumy_burin_MIC01.mp3",
+      "target_path": "audio/shared/target/nmUmlcfjI90__nmUmlcfjI90_000005_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000005_BMI_UK18090305_sumy_burin_MIC01.mp3",
       "generation_status": "generated",
       "error": null,
-      "metrics": {}
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
     },
     {
       "id": 7,
-      "source_path": "audio/shared/source/0zQ1XXJPORA__0zQ1XXJPORA_000001_BMI_UK16100032_kiev_fasova_MIC02.mp3",
-      "target_path": "audio/shared/target/0zQ1XXJPORA__0zQ1XXJPORA_000001_mixture.mp3",
-      "generated_path": "audio/run_b/generated/20260317-160236__000001_BMI_UK16100032_kiev_fasova_MIC02.mp3",
+      "source_path": "audio/shared/source/Q5X7K-Jc85Q__Q5X7K-Jc85Q_000001_BMI_UK15070074_poltava_solonytsya_MIC01.mp3",
+      "target_path": "audio/shared/target/Q5X7K-Jc85Q__Q5X7K-Jc85Q_000001_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000001_BMI_UK15070074_poltava_solonytsya_MIC01.mp3",
       "generation_status": "generated",
       "error": null,
-      "metrics": {}
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
     },
     {
       "id": 8,
-      "source_path": "audio/shared/source/-oYOExW80Ps__-oYOExW80Ps_000006_BMI_UK17100190_kherson_bekhtery_MIC01.mp3",
-      "target_path": "audio/shared/target/-oYOExW80Ps__-oYOExW80Ps_000006_mixture.mp3",
-      "generated_path": "audio/run_b/generated/20260317-160236__000006_BMI_UK17100190_kherson_bekhtery_MIC01.mp3",
+      "source_path": "audio/shared/source/RqzLIR_lhzM__RqzLIR_lhzM_000000_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC02.mp3",
+      "target_path": "audio/shared/target/RqzLIR_lhzM__RqzLIR_lhzM_000000_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000000_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC02.mp3",
       "generation_status": "generated",
       "error": null,
-      "metrics": {}
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 9,
+      "source_path": "audio/shared/source/nmUmlcfjI90__nmUmlcfjI90_000009_BMI_UK18090305_sumy_burin_MIC06.mp3",
+      "target_path": "audio/shared/target/nmUmlcfjI90__nmUmlcfjI90_000009_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000009_BMI_UK18090305_sumy_burin_MIC06.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 10,
+      "source_path": "audio/shared/source/nmUmlcfjI90__nmUmlcfjI90_000006_BMI_UK18090305_sumy_burin_MIC01.mp3",
+      "target_path": "audio/shared/target/nmUmlcfjI90__nmUmlcfjI90_000006_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000006_BMI_UK18090305_sumy_burin_MIC01.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 11,
+      "source_path": "audio/shared/source/on5A7DoUGao__on5A7DoUGao_000000_BMI_UK18060688_volyn_olenyne_MIC02.mp3",
+      "target_path": "audio/shared/target/on5A7DoUGao__on5A7DoUGao_000000_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000000_BMI_UK18060688_volyn_olenyne_MIC02.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 12,
+      "source_path": "audio/shared/source/PlIjo-YzNIA__PlIjo-YzNIA_000000_BMI_UK18090318_sumy_burin_MIC04.mp3",
+      "target_path": "audio/shared/target/PlIjo-YzNIA__PlIjo-YzNIA_000000_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000000_BMI_UK18090318_sumy_burin_MIC04.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 13,
+      "source_path": "audio/shared/source/PfYetbLkk5c__PfYetbLkk5c_000008_BMI_UK15070075_poltava_solonytsya_MIC01.mp3",
+      "target_path": "audio/shared/target/PfYetbLkk5c__PfYetbLkk5c_000008_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000008_BMI_UK15070075_poltava_solonytsya_MIC01.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 14,
+      "source_path": "audio/shared/source/aje_N4N19Ws__aje_N4N19Ws_000001_BMI_UK20080059_khmelnytskyi_dyatylivka_MIC04.mp3",
+      "target_path": "audio/shared/target/aje_N4N19Ws__aje_N4N19Ws_000001_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000001_BMI_UK20080059_khmelnytskyi_dyatylivka_MIC04.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 15,
+      "source_path": "audio/shared/source/RqzLIR_lhzM__RqzLIR_lhzM_000003_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC04.mp3",
+      "target_path": "audio/shared/target/RqzLIR_lhzM__RqzLIR_lhzM_000003_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000003_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC04.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 16,
+      "source_path": "audio/shared/source/aje_N4N19Ws__aje_N4N19Ws_000002_BMI_UK20080059_khmelnytskyi_dyatylivka_MIC02.mp3",
+      "target_path": "audio/shared/target/aje_N4N19Ws__aje_N4N19Ws_000002_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000002_BMI_UK20080059_khmelnytskyi_dyatylivka_MIC02.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 17,
+      "source_path": "audio/shared/source/jV7XDLvWg3c__jV7XDLvWg3c_000001_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC02.mp3",
+      "target_path": "audio/shared/target/jV7XDLvWg3c__jV7XDLvWg3c_000001_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000001_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC02.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 18,
+      "source_path": "audio/shared/source/toaeaTwqjLI__toaeaTwqjLI_000003_BMI_UK20080099_lviv_hlynytsi_MIC02.mp3",
+      "target_path": "audio/shared/target/toaeaTwqjLI__toaeaTwqjLI_000003_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000003_BMI_UK20080099_lviv_hlynytsi_MIC02.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 19,
+      "source_path": "audio/shared/source/toaeaTwqjLI__toaeaTwqjLI_000000_BMI_UK20080099_lviv_hlynytsi_MIC02.mp3",
+      "target_path": "audio/shared/target/toaeaTwqjLI__toaeaTwqjLI_000000_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000000_BMI_UK20080099_lviv_hlynytsi_MIC02.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 20,
+      "source_path": "audio/shared/source/nmUmlcfjI90__nmUmlcfjI90_000004_BMI_UK18090305_sumy_burin_MIC04.mp3",
+      "target_path": "audio/shared/target/nmUmlcfjI90__nmUmlcfjI90_000004_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000004_BMI_UK18090305_sumy_burin_MIC04.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 21,
+      "source_path": "audio/shared/source/RqzLIR_lhzM__RqzLIR_lhzM_000001_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC04.mp3",
+      "target_path": "audio/shared/target/RqzLIR_lhzM__RqzLIR_lhzM_000001_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000001_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC04.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 22,
+      "source_path": "audio/shared/source/jV7XDLvWg3c__jV7XDLvWg3c_000002_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC02.mp3",
+      "target_path": "audio/shared/target/jV7XDLvWg3c__jV7XDLvWg3c_000002_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000002_BMI_UK20080229_ivano-frankivsk_pidvynnya_MIC02.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 23,
+      "source_path": "audio/shared/source/T-pp2380F9c__T-pp2380F9c_000000_BMI_UK20080294_khmelnytskyi_lysets_MIC05.mp3",
+      "target_path": "audio/shared/target/T-pp2380F9c__T-pp2380F9c_000000_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000000_BMI_UK20080294_khmelnytskyi_lysets_MIC05.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 24,
+      "source_path": "audio/shared/source/nmUmlcfjI90__nmUmlcfjI90_000001_BMI_UK18090305_sumy_burin_MIC04.mp3",
+      "target_path": "audio/shared/target/nmUmlcfjI90__nmUmlcfjI90_000001_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000001_BMI_UK18090305_sumy_burin_MIC04.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 25,
+      "source_path": "audio/shared/source/n-q4IEo_LCg__n-q4IEo_LCg_000002_BMI_UK17100193_kherson_bekhtery_MIC01.mp3",
+      "target_path": "audio/shared/target/n-q4IEo_LCg__n-q4IEo_LCg_000002_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000002_BMI_UK17100193_kherson_bekhtery_MIC01.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 26,
+      "source_path": "audio/shared/source/toaeaTwqjLI__toaeaTwqjLI_000003_BMI_UK20080099_lviv_hlynytsi_MIC04.mp3",
+      "target_path": "audio/shared/target/toaeaTwqjLI__toaeaTwqjLI_000003_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000003_BMI_UK20080099_lviv_hlynytsi_MIC04.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 27,
+      "source_path": "audio/shared/source/T-pp2380F9c__T-pp2380F9c_000005_BMI_UK20080294_khmelnytskyi_lysets_MIC05.mp3",
+      "target_path": "audio/shared/target/T-pp2380F9c__T-pp2380F9c_000005_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000005_BMI_UK20080294_khmelnytskyi_lysets_MIC05.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 28,
+      "source_path": "audio/shared/source/GCTaae0LLDM__GCTaae0LLDM_000000_BMI_UK18060061_zhytomyr_kalinivka_MIC01.mp3",
+      "target_path": "audio/shared/target/GCTaae0LLDM__GCTaae0LLDM_000000_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000000_BMI_UK18060061_zhytomyr_kalinivka_MIC01.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 29,
+      "source_path": "audio/shared/source/bw6zx2HCXpU__bw6zx2HCXpU_000001_BMI_UK20080115_lviv_hlynytsi_MIC01.mp3",
+      "target_path": "audio/shared/target/bw6zx2HCXpU__bw6zx2HCXpU_000001_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000001_BMI_UK20080115_lviv_hlynytsi_MIC01.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 30,
+      "source_path": "audio/shared/source/PlIjo-YzNIA__PlIjo-YzNIA_000000_BMI_UK18090318_sumy_burin_MIC02.mp3",
+      "target_path": "audio/shared/target/PlIjo-YzNIA__PlIjo-YzNIA_000000_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000000_BMI_UK18090318_sumy_burin_MIC02.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 31,
+      "source_path": "audio/shared/source/nmUmlcfjI90__nmUmlcfjI90_000007_BMI_UK18090305_sumy_burin_MIC04.mp3",
+      "target_path": "audio/shared/target/nmUmlcfjI90__nmUmlcfjI90_000007_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000007_BMI_UK18090305_sumy_burin_MIC04.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 32,
+      "source_path": "audio/shared/source/PlIjo-YzNIA__PlIjo-YzNIA_000000_BMI_UK18090318_sumy_burin_MIC01.mp3",
+      "target_path": "audio/shared/target/PlIjo-YzNIA__PlIjo-YzNIA_000000_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000000_BMI_UK18090318_sumy_burin_MIC01.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 33,
+      "source_path": "audio/shared/source/jWD6oJ8QwAc__jWD6oJ8QwAc_000000_BMI_UK17100199_kherson_bekhtery_MIC01.mp3",
+      "target_path": "audio/shared/target/jWD6oJ8QwAc__jWD6oJ8QwAc_000000_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000000_BMI_UK17100199_kherson_bekhtery_MIC01.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 34,
+      "source_path": "audio/shared/source/klcrcVLxrSE__klcrcVLxrSE_000001_BMI_UK18060574_rivne_krychylsk_MIC03_20.mp3",
+      "target_path": "audio/shared/target/klcrcVLxrSE__klcrcVLxrSE_000001_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000001_BMI_UK18060574_rivne_krychylsk_MIC03_20.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 35,
+      "source_path": "audio/shared/source/T-pp2380F9c__T-pp2380F9c_000004_BMI_UK20080294_khmelnytskyi_lysets_MIC02.mp3",
+      "target_path": "audio/shared/target/T-pp2380F9c__T-pp2380F9c_000004_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000004_BMI_UK20080294_khmelnytskyi_lysets_MIC02.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
+    },
+    {
+      "id": 36,
+      "source_path": "audio/shared/source/RqzLIR_lhzM__RqzLIR_lhzM_000000_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC05.mp3",
+      "target_path": "audio/shared/target/RqzLIR_lhzM__RqzLIR_lhzM_000000_mixture.mp3",
+      "generated_path": "audio/run_b/generated/20260331-105848__000000_BMI_UK17100716_khmelnytskyi_zeleni_kurylivtsi_MIC05.mp3",
+      "generation_status": "generated",
+      "error": null,
+      "metrics": {},
+      "metric_statuses": {},
+      "metric_errors": {}
     }
   ]
 }
